@@ -1,4 +1,4 @@
-package com.mac.marsrogue.ascii;
+package com.mac.marsrogue.ui.ascii;
 
 /**
  * Created by Matt on 29/04/2017.

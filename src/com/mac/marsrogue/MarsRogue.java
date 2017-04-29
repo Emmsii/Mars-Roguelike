@@ -1,9 +1,11 @@
 package com.mac.marsrogue;
 
 import com.esotericsoftware.minlog.Log;
-import com.mac.marsrogue.ascii.AsciiFont;
-import com.mac.marsrogue.ascii.AsciiPanel;
-import com.mac.marsrogue.ascii.CustomAsciiTerminal;
+
+import com.mac.marsrogue.game.Game;
+import com.mac.marsrogue.ui.ascii.*;
+import com.mac.marsrogue.ui.screen.GameScreen;
+import com.mac.marsrogue.ui.screen.Screen;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -26,6 +28,9 @@ public class MarsRogue {
     private CustomAsciiTerminal terminal;
     private AsciiPanel panel;
     
+    private Game game;
+    private Screen screen;
+    
     public MarsRogue(){
         Log.set(Log.LEVEL_TRACE);
         
@@ -38,22 +43,21 @@ public class MarsRogue {
         
         panel = terminal.getAsciiPanel();
         
+        game = new Game();
+        game.init();
+        screen = new GameScreen(game);
+        
         render();
     }
     
     private void input(KeyEvent key){
+        screen = screen.input(key);
         render();
     }
     
     private void render(){
         panel.clear();
-    
-        for(int y = 0; y < height(); y++){
-            for(int x = 0; x < width(); x++){
-                panel.write((char) (Math.random() * 255), x, y, new Color((float) Math.random(), (float) Math.random(), (float) Math.random()));
-            }
-        }
-        
+        screen.render(panel);
         terminal.repaint();
     }
     

@@ -1,4 +1,4 @@
-package com.mac.marsrogue.ascii;
+package com.mac.marsrogue.ui.ascii;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
