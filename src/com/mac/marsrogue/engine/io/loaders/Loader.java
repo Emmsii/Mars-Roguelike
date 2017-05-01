@@ -1,4 +1,4 @@
-package com.mac.marsrogue.engine.io;
+package com.mac.marsrogue.engine.io.loaders;
 
 /**
  * Project: Mars Roguelike

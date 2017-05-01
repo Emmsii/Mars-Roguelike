@@ -16,7 +16,7 @@ import com.mac.marsrogue.game.entity.item.weapon.Explosive;
 import com.mac.marsrogue.game.entity.item.weapon.Weapon;
 import com.mac.marsrogue.game.map.Map;
 import com.mac.marsrogue.game.MessageLog.LogType;
-import jdk.nashorn.internal.ir.Terminal;
+import com.mac.marsrogue.game.map.object.Terminal;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class Creature extends Entity{
     protected int hp;
     protected int awareness;
     
-    //protected Terminal terminal;
+    protected Terminal terminal;
     protected boolean hasMoved;
     protected boolean hasUsedEquipment;
     protected int timeStationary;
@@ -182,7 +182,7 @@ public class Creature extends Entity{
     }
 
     public boolean isEquipped(Equipable equipable){
-        Log.debug("TODO: Is equiped");
+        Log.debug("TODO: Is equiped"); //TODO: Is equipped
         return false;
     }
     
@@ -203,6 +203,7 @@ public class Creature extends Entity{
     
     /* Util Methods */
 
+    //TODO: Move danger values to creature ai
     public float dangerValue(Creature other){
         //get the danger value of another creature based off weapons and armor
         float dangerValue = 0f;
@@ -234,7 +235,7 @@ public class Creature extends Entity{
 
         float danger = 1f;
         float healthValue = ((float) hp / (float) maxHp) * 0.85f;
-        int alliesNear = getCreatuesWhoSeeMe(faction).size();
+        int alliesNear = getCreaturesWhoSeeMe(faction).size();
 
         List<Creature> enemiesNear = getCreaturesWhoSeeMe();
         int enemiesNearCount = 0;
@@ -265,7 +266,7 @@ public class Creature extends Entity{
         return danger;
     }
 
-    public List<Creature> getCreatuesWhoSeeMe(Faction ofFaction){
+    public List<Creature> getCreaturesWhoSeeMe(Faction ofFaction){
         List<Creature> others = new ArrayList<Creature>();
         if(map == null) return others;
 
@@ -280,7 +281,7 @@ public class Creature extends Entity{
     }
 
     public List<Creature> getCreaturesWhoSeeMe(){
-        return getCreatuesWhoSeeMe(Faction.ALL);
+        return getCreaturesWhoSeeMe(Faction.ALL);
     }
 
     public boolean canSee(int xp, int yp, int zp){
@@ -334,9 +335,9 @@ public class Creature extends Entity{
         this.hasUsedEquipment = hasUsedEquipment;
     }
 
-//    public void setTerminal(Terminal terminal){
-//        this.terminal = terminal;
-//    }
+    public void setTerminal(Terminal terminal){
+        this.terminal = terminal;
+    }
     
     /* Getter Methods */
 
@@ -392,9 +393,9 @@ public class Creature extends Entity{
         return hasUsedEquipment;
     }
 
-//    public Terminal terminal(){
-//        return terminal;
-//    }
+    public Terminal terminal(){
+        return terminal;
+    }
 
     public boolean isPlayer(){
         return glyph == '@';

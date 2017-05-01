@@ -4,7 +4,7 @@ import com.esotericsoftware.minlog.Log;
 import com.mac.marsrogue.engine.util.Maths.Point;
 import com.mac.marsrogue.engine.util.color.ColoredString;
 import com.mac.marsrogue.engine.util.color.Colors;
-import com.mac.marsrogue.game.MessageLog;
+import com.mac.marsrogue.game.MessageLog.LogType;
 import com.mac.marsrogue.game.entity.creature.Creature;
 import com.mac.marsrogue.game.entity.item.Item;
 import com.mac.marsrogue.game.map.decal.BloodMap;
@@ -14,7 +14,7 @@ import com.mac.marsrogue.game.map.object.MapObject;
 import com.mac.marsrogue.game.map.tile.EmptyTile;
 import com.mac.marsrogue.game.map.tile.Tile;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,6 +79,8 @@ public class Map {
         this.visible = new HashMap<Integer, boolean[][]>();
 
         this.fov = new FieldOfView(this);
+        this.bloodMap = new BloodMap(this);
+        this.sootMap = new SootMap(this);
         
         for(int z = 0; z < depth; z++) {
             creatureList.put(z, new ArrayList<Creature>());
@@ -322,7 +324,7 @@ public class Map {
             if(item(p.x, p.y, p.z) == null){
                 add(item, p);
                 Creature c = creature(p.x, p.y, p.z);
-                if(c != null) c.notify(new ColoredString("A %s lands between your feet."), MessageLog.LogType.MESSAGE, item.name());
+                if(c != null) c.notify(new ColoredString("A %s lands between your feet."), LogType.MESSAGE, item.name());
                 return true;
             }else{
                 List<Point> neighbours = p.neighboursCardinal();

@@ -28,6 +28,7 @@ alien_blood: 71, 87, 32
 human_blood: 112, 46, 36
 
 # ITEMS
+blueprint: 51, 125, 222
 grenade: 70, 70, 70
 default_gun: 255, 255, 255
 matter_container: 159, 68, 154

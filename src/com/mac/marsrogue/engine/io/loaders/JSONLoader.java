@@ -1,4 +1,4 @@
-package com.mac.marsrogue.engine.io;
+package com.mac.marsrogue.engine.io.loaders;
 
 import com.esotericsoftware.minlog.Log;
 import com.mac.marsrogue.engine.util.Maths.Maths;

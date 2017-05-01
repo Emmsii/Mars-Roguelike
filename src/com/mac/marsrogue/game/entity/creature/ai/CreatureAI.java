@@ -7,9 +7,10 @@ import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.MessageLog;
 import com.mac.marsrogue.game.MessageLog.LogType;
 import com.mac.marsrogue.game.entity.creature.Creature;
+import com.mac.marsrogue.game.entity.creature.ai.behaviour.Behaviour;
 import com.mac.marsrogue.game.map.object.Door;
 import com.mac.marsrogue.game.map.object.MapObject;
-import jdk.nashorn.internal.ir.Terminal;
+import com.mac.marsrogue.game.map.object.Terminal;
 
 /**
  * Project: Mars Roguelike
@@ -18,6 +19,7 @@ import jdk.nashorn.internal.ir.Terminal;
 public abstract class CreatureAI {
     
     protected Creature creature;
+    protected Behaviour behaviour;
     
     public CreatureAI(Creature creature){
         this.creature = creature;
@@ -28,6 +30,7 @@ public abstract class CreatureAI {
     
     public void update(){
         creature.setMoved(false);
+        if(behaviour != null) behaviour.update(creature);
     }
 
     public boolean tryMove(int xp, int yp, int zp){
@@ -72,11 +75,10 @@ public abstract class CreatureAI {
                 return true;
             }
             return true;
+        } else if(obj instanceof Terminal){
+            Terminal t = (Terminal) obj;
+            creature.setTerminal(t);
         }
-//        else if(obj instanceof Terminal){
-//            Terminal t = (Terminal) obj;
-//            creature.setTerminal(t);
-//        }
 
         return false;
     }
@@ -99,7 +101,7 @@ public abstract class CreatureAI {
 
     }
 
-//    public void setBehaviour(Behaviour behaviour){
-//        this.behaviour = behaviour;
-//    }
+    public void setBehaviour(Behaviour behaviour){
+        this.behaviour = behaviour;
+    }
 }

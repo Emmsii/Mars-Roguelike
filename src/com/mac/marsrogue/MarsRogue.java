@@ -2,12 +2,15 @@ package com.mac.marsrogue;
 
 import com.esotericsoftware.minlog.Log;
 
+import com.mac.marsrogue.engine.io.loaders.CreatureLoader;
+import com.mac.marsrogue.engine.io.loaders.FactionLoader;
+import com.mac.marsrogue.engine.io.loaders.ItemLoader;
 import com.mac.marsrogue.engine.util.Timer;
-import com.mac.marsrogue.engine.io.ColorLoader;
+import com.mac.marsrogue.engine.io.loaders.ColorLoader;
 import com.mac.marsrogue.engine.io.Config;
 import com.mac.marsrogue.game.Game;
 import com.mac.marsrogue.engine.ascii.*;
-import com.mac.marsrogue.ui.screen.GameScreen;
+import com.mac.marsrogue.ui.screen.game.GameScreen;
 import com.mac.marsrogue.ui.screen.Screen;
 
 import java.awt.event.KeyEvent;
@@ -62,6 +65,9 @@ public class MarsRogue {
         Config.load();
         
         new ColorLoader().load("colors.txt");
+        new FactionLoader().load("factions");
+        new ItemLoader().load("items");
+        new CreatureLoader().load("creatures");
                 
         timer.stop();
         Log.info("Loaded data in " + timer.result());
