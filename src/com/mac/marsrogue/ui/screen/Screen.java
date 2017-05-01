@@ -4,7 +4,7 @@ import com.mac.marsrogue.MarsRogue;
 import com.mac.marsrogue.engine.util.Maths.Line;
 import com.mac.marsrogue.engine.util.Maths.Point;
 import com.mac.marsrogue.engine.util.color.Colors;
-import com.mac.marsrogue.ui.ascii.AsciiPanel;
+import com.mac.marsrogue.engine.ascii.AsciiPanel;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

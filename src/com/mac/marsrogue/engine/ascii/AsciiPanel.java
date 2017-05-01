@@ -1,4 +1,4 @@
-package com.mac.marsrogue.ui.ascii;
+package com.mac.marsrogue.engine.ascii;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

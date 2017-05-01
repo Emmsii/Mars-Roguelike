@@ -1,7 +1,7 @@
 package com.mac.marsrogue.ui.screen;
 
 import com.mac.marsrogue.game.Game;
-import com.mac.marsrogue.ui.ascii.AsciiPanel;
+import com.mac.marsrogue.engine.ascii.AsciiPanel;
 
 import java.awt.event.KeyEvent;
 

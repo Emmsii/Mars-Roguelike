@@ -1,0 +1,24 @@
+{
+	"factions": [
+		{
+			"name": "Friendly",
+			"relations": [
+				{ "faction": "aggressive", "action": "flee_on_sight" }
+			]
+		},
+		{
+			"name": "Neutral",
+			"relations": [
+				{ "faction": "aggressive", "action": "attack_on_attacked" }
+			]
+		},
+		{
+			"name": "Aggressive",
+			"relations": [
+				{ "faction": "friendly", "action": "attack_on_sight" },
+				{ "faction": "neutral",  "action": "attack_on_sight" }
+			]
+		}
+	
+	]
+}

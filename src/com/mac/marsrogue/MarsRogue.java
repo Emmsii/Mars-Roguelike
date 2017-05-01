@@ -2,12 +2,14 @@ package com.mac.marsrogue;
 
 import com.esotericsoftware.minlog.Log;
 
+import com.mac.marsrogue.engine.util.Timer;
+import com.mac.marsrogue.engine.io.ColorLoader;
+import com.mac.marsrogue.engine.io.Config;
 import com.mac.marsrogue.game.Game;
-import com.mac.marsrogue.ui.ascii.*;
+import com.mac.marsrogue.engine.ascii.*;
 import com.mac.marsrogue.ui.screen.GameScreen;
 import com.mac.marsrogue.ui.screen.Screen;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -34,6 +36,8 @@ public class MarsRogue {
     public MarsRogue(){
         Log.set(Log.LEVEL_TRACE);
         
+        loadData();
+        
         terminal = new CustomAsciiTerminal(TITLE + " " + VERSION, width(), height(), FONT){
             @Override
             public void onKeyEvent(KeyEvent e) {
@@ -48,6 +52,19 @@ public class MarsRogue {
         screen = new GameScreen(game);
         
         render();
+    }
+    
+    private void loadData(){
+        Log.info("Loading...");
+        Timer timer = new Timer();
+        timer.start();
+
+        Config.load();
+        
+        new ColorLoader().load("colors.txt");
+                
+        timer.stop();
+        Log.info("Loaded data in " + timer.result());
     }
     
     private void input(KeyEvent key){

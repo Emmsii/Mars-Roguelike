@@ -1,0 +1,50 @@
+# GENERAL
+red: 222, 44, 44
+green: 104, 222, 44
+blue: 44, 106, 222
+orange: 222, 139, 44
+yellow: 240, 240, 58
+pink: 233, 65, 242
+purple: 143, 49, 232
+cyan: 74, 207, 217
+gray: 130, 130, 130
+light_gray: 200, 200, 200
+white: 230, 234, 235
+black: 15, 15, 15 
+
+# UI
+default_fg: 223, 239, 215
+default_bg: 20, 12, 28
+border: 77, 73, 77
+dark_text: 40, 40, 40
+ui_target_line: 200, 200, 10
+
+# CREATURES
+player: 256, 256, 256
+colonist: 150, 150, 150
+enemy: 150, 153, 77
+
+alien_blood: 71, 87, 32
+human_blood: 112, 46, 36
+
+# ITEMS
+grenade: 70, 70, 70
+default_gun: 255, 255, 255
+matter_container: 159, 68, 154
+
+bolt: 122, 203, 214
+laser: 200, 100, 100
+slug: 140, 140, 140
+
+common: 255, 255, 255
+uncommon: 240, 175, 84
+rare: 84, 188, 240
+very_rare: 172, 84, 240
+
+# MAP
+wall_fg: 42, 63, 74
+wall_bg: 66, 92, 105
+floor_fg: 80, 98, 107
+floor_bg: 62, 78, 87
+door_fg: 255, 255, 255
+terminal_fg: 76, 140, 83

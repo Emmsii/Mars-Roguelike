@@ -1,0 +1,29 @@
+{
+	"creatures":[
+		{
+			"name": "Colonist",
+			"description": "Description of colonist goes here",
+			"glyph": "C",
+			"color": "colonist",
+			"max_hp": 100,
+			"awareness": 20,
+			"blood_type": "human",
+			"faction": "friendly",
+			"flags":[
+				{ "name": "BLEEDING" },
+				{ "name": "TEST" }
+			]
+		},
+		
+		{
+			"name": "Enemy",
+			"description": "Description of enemy goes here",
+			"glyph": "A",
+			"color": "enemy",
+			"max_hp": 100,
+			"awareness": 20,
+			"blood_type": "alien",
+			"faction": "aggressive"
+		}
+	]
+}

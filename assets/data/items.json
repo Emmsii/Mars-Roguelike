@@ -1,0 +1,10 @@
+{
+	"items":[
+		{
+			"name": "Thing",
+			"description": "Description of thing goes here",
+			"glyph": "?",
+			"color": "red"
+		}
+	]
+}
