@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class Dijkstra {
 
-    private final int FILL = Integer.MAX_VALUE;
+    public static final int FILL = Integer.MAX_VALUE;
 
     private Map map;
     private int width, height;
@@ -20,6 +20,10 @@ public class Dijkstra {
 
     int maxValue;
 
+    public Dijkstra(Map map) {
+        this(map, 0);
+    }
+    
     public Dijkstra(Map map, int maxValue) {
         this.map = map;
         this.width = map.width();
@@ -82,7 +86,6 @@ public class Dijkstra {
     }
 
     public static Point rollDown(Point start, int[][] input, int offset, int stopAt){
-
         if(start.x < 0 || start.y < 0 || start.x >= input.length || start.y >= input[0].length){
             Log.warn("Cannot roll down dijkstra map, input point out of bounds: " + start);
             return start;
@@ -95,6 +98,7 @@ public class Dijkstra {
         int lowestCardinal = Integer.MAX_VALUE;
         for(Point n : start.neighboursCardinal()){
             int in = input[n.x][n.y] + offset;
+            if(in == FILL) continue;
             if(in < lowestCardinal && in >= stopAt){
                 lowestCardinal = in;
                 pointCardinal = n;
@@ -105,6 +109,7 @@ public class Dijkstra {
         int lowestDiagonal = Integer.MAX_VALUE;
         for(Point n : start.neighboursDiagonal()){
             int in = input[n.x][n.y] + offset;
+            if(in == FILL) continue;
             if(in < lowestDiagonal && in >= stopAt){
                 lowestDiagonal = in;
                 pointDiagonal = n;
@@ -122,13 +127,15 @@ public class Dijkstra {
         }
 
         if(input[start.x][start.y] + offset == stopAt) return start;
+        
         else if(input[start.x][start.y] + offset > stopAt) return rollDown(start, input, offset, stopAt);
-
+        
         Point pointCardinal = start;
-        int highestCardinal= Integer.MIN_VALUE;
+        int highestCardinal = Integer.MIN_VALUE;
         for(Point n : start.neighboursCardinal()){
             int in = input[n.x][n.y] + offset;
-            if(in > highestCardinal && in <= stopAt){
+            if(in == FILL) continue;
+            if(in > highestCardinal){
                 highestCardinal = in;
                 pointCardinal = n;
             }
@@ -138,7 +145,8 @@ public class Dijkstra {
         int highestDiagonal = Integer.MIN_VALUE;
         for(Point n : start.neighboursDiagonal()){
             int in = input[n.x][n.y] + offset;
-            if(in > highestDiagonal && in <= stopAt){
+            if(in == FILL) continue;
+            if(in > highestDiagonal){
                 highestDiagonal = in;
                 pointDiagonal = n;
             }

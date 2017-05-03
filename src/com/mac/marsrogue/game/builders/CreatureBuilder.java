@@ -1,5 +1,6 @@
 package com.mac.marsrogue.game.builders;
 
+import com.esotericsoftware.minlog.Log;
 import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.MessageLog;
 import com.mac.marsrogue.game.MessageLog.LogType;
@@ -8,6 +9,7 @@ import com.mac.marsrogue.game.entity.creature.Creature;
 import com.mac.marsrogue.game.entity.creature.ai.ColonistAI;
 import com.mac.marsrogue.game.entity.creature.ai.EnemyAI;
 import com.mac.marsrogue.game.entity.creature.ai.PlayerAI;
+import com.mac.marsrogue.game.entity.creature.limbs.Limb;
 
 import java.util.HashMap;
 
@@ -31,7 +33,8 @@ public class CreatureBuilder {
 
     public static Creature newPlayer(HashMap<LogType, MessageLog> logs){
         Creature player = new Creature('@', Colors.get("player"), "Player", "Its you!", Colors.get("human_blood"), Codex.factions.get("neutral"));
-        player.setStats(100, 20);
+        player.limbController().addLimb(Limb.ALL);
+        player.setStats(10000, 20);
         new PlayerAI(player, logs);
         return player;
     }

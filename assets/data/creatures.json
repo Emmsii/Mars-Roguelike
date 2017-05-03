@@ -11,14 +11,13 @@
 			"faction": "friendly",
 			"limbs":[
 				{ "name": "HEAD" },
-				
+				{ "name": "TORSO" },
 				{ "name": "ARM_LEFT" },
 				{ "name": "ARM_RIGHT" },
 				{ "name": "LEG_LEFT" },
 				{ "name": "LEG_RIGHT" }
 			],
 			"flags":[
-				{ "name": "BLEEDING" },
 				{ "name": "TEST" }
 			]
 		},

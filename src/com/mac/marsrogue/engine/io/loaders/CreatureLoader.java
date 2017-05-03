@@ -50,7 +50,7 @@ public class CreatureLoader extends Loader{
             Faction faction = Codex.factions.get((String) JSONLoader.parseField("faction", creature, "unknown"));
             
             Set<String> newFlags = new HashSet<String>();
-            JSONArray flags = (JSONArray) JSONLoader.parseField("flags", creature, null);
+            JSONArray flags = (JSONArray) creature.get("flags");
             if(flags != null){
                 for(int j = 0; j < flags.size(); j++){
                     JSONObject flag = (JSONObject) flags.get(j);

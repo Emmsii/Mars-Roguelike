@@ -8,6 +8,7 @@ import com.mac.marsrogue.engine.util.color.ColoredString;
 import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.entity.Entity;
 import com.mac.marsrogue.game.entity.creature.ai.CreatureAI;
+import com.mac.marsrogue.game.entity.creature.limbs.Limb;
 import com.mac.marsrogue.game.entity.creature.limbs.LimbController;
 import com.mac.marsrogue.game.entity.item.Equipable;
 import com.mac.marsrogue.game.entity.item.Inventory;
@@ -22,6 +23,7 @@ import com.mac.marsrogue.game.map.object.Terminal;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,9 +35,8 @@ public class Creature extends Entity{
     protected LimbController limbController;
     
     protected Weapon weapon;
-    protected Armor head;
-    protected Armor chest;
-    protected Armor legs;
+   
+    protected HashMap<Limb, Armor> armor;
     
     private Inventory<Item> inventory;
     
@@ -56,9 +57,15 @@ public class Creature extends Entity{
     
     public Creature(char glyph, Color foregroundColor, String name, String description, Color bloodType, Faction faction) {
         super(glyph, foregroundColor, name, description);
+        this.bloodType = bloodType;
         this.limbController = new LimbController();
+        this.armor = new HashMap<Limb, Armor>();
         this.inventory = new Inventory<Item>();
         this.faction = faction;
+        
+        for(Limb l : limbController().limbs()){
+            armor.put(l, null);
+        }
     }
 
     public void setStats(int maxHp, int awareness){
@@ -120,9 +127,20 @@ public class Creature extends Entity{
         if(damage >= maxHp){
             //			map.bloodMap().explode(x, y, z, damage, bloodType);
         }else{
-            map.bloodMap().bloodSplat(x, y, z, xt, yt, (int) (damage * 0.4), bloodType);
+//            map.bloodMap().bloodSplat(x, y, z, xt, yt, (int) (damage * 0.4), bloodType);
         }
         modifyHp(-damage, causeOfDeath);
+    }
+    
+    public boolean removeLimb(){
+        Limb limbToRemove = limbController.getLimbToHit();
+        if(limbToRemove == Limb.NOTHING) return false;
+        
+        Armor equippedArmor = armor(limbToRemove);
+        drop(equippedArmor);
+        //drop(limbitem);
+        
+        return true;
     }
     
     /* Item Methods */
@@ -207,77 +225,13 @@ public class Creature extends Entity{
     }
     
     /* Util Methods */
-
-    //TODO: Move danger values to creature ai
-    public float dangerValue(Creature other){
-        //get the danger value of another creature based off weapons and armor
-        float dangerValue = 0f;
-
-        float weaponValue = 0f;
-        float armorValue = 0f;
-
-        if(other.weapon() != null) weaponValue += other.weapon().score();
-        if(other.head() != null) armorValue += other.head().score();
-        if(other.chest() != null) armorValue += other.chest().score();
-        if(other.legs() != null) armorValue += other.legs().score();
-
-        dangerValue += weaponValue * 0.5f;
-        dangerValue += armorValue * 0.45f;
-        //		System.out.println(other.name + " Danger: " + dangerValue);
-
-        return dangerValue;
-    }
-
-    public float dangerValue(){
-		
-		/*
-		 * Danger Value is based off:
-		 * 	+ Units Health
-		 * 	+ Count of nearby creatures of same faction
-		 *  + Ammo left
-		 *  + Nearby enemies health
-		 */
-
-        float danger = 1f;
-        float healthValue = ((float) hp / (float) maxHp) * 0.85f;
-        int alliesNear = getCreaturesWhoSeeMe(faction).size();
-
-        List<Creature> enemiesNear = getCreaturesWhoSeeMe();
-        int enemiesNearCount = 0;
-        int totalMaxHealth = 0;
-        int totalHealth = 0;
-        for(Creature c : enemiesNear){
-            if(c.faction == null || faction == null || !c.faction.name().equalsIgnoreCase(faction.name())){
-                totalMaxHealth += c.maxHp();
-                totalHealth += c.hp();
-                enemiesNearCount++;
-            }
-        }
-
-        float alliesNearValue = alliesNear * 0.25f;
-
-        float enemyHealthValue = totalMaxHealth == 0 ? 0f : ((float) totalHealth / (float) totalMaxHealth) * 0.75f;
-        float enemyNearValue = enemiesNearCount * 0.4f;
-
-        danger -= alliesNearValue;
-        danger -= healthValue;
-
-        danger += enemyHealthValue;
-        danger += enemyNearValue;
-
-        //		System.out.println("AlliesNearValue: " + alliesNearValue + " HealthValue: " + healthValue + " EnemyHealth: " + enemyHealthValue + " EnemiesNear: " + enemyNearValue);
-        //		System.out.println("DANGER: " + danger + " (1 - " + alliesNearValue + " - " + healthValue + " + " + enemyHealthValue + " + " + enemyNearValue + ")");
-
-        return danger;
-    }
-
+    
     public List<Creature> getCreaturesWhoSeeMe(Faction ofFaction){
         List<Creature> others = new ArrayList<Creature>();
         if(map == null) return others;
-
         for(Creature c : map.creatures(z)){
             //			if(c.id == this.id) continue;
-            if(ofFaction == null || c.faction().name().equalsIgnoreCase(faction.name())){
+            if(ofFaction == Faction.ALL || ofFaction == null || c.faction().name().equalsIgnoreCase(faction.name())){
                 if(c.canSee(x, y, z)) others.add(c);
             }
         }
@@ -289,6 +243,10 @@ public class Creature extends Entity{
         return getCreaturesWhoSeeMe(Faction.ALL);
     }
 
+    public boolean canSee(Creature creature){
+        return canSee(creature.x, creature.y, creature.z);
+    }
+    
     public boolean canSee(int xp, int yp, int zp){
         return ai.canSee(xp, yp, zp);
     }
@@ -320,16 +278,8 @@ public class Creature extends Entity{
         this.weapon = weapon;
     }
 
-    public void setHead(Armor head){
-        this.head = head;
-    }
-
-    public void setChest(Armor chest){
-        this.chest = chest;
-    }
-
-    public void setLegs(Armor legs){
-        this.legs = legs;
+    public void setArmor(Limb limb, Armor armor){
+        this.armor.put(limb, armor);
     }
 
     public void setMoved(boolean hasMoved){
@@ -358,16 +308,12 @@ public class Creature extends Entity{
         return weapon;
     }
 
-    public Armor head(){
-        return head;
+    public Armor armor(Limb limb){
+        return armor.get(limb);
     }
-
-    public Armor chest(){
-        return chest;
-    }
-
-    public Armor legs(){
-        return legs;
+    
+    public HashMap<Limb, Armor> armor(){
+        return armor;
     }
 
     public int awareness(){
@@ -406,10 +352,14 @@ public class Creature extends Entity{
         return terminal;
     }
 
+    public CreatureAI ai(){
+        return ai;
+    }
+    
     public boolean isPlayer(){
         return glyph == '@';
     }
-    
+        
     /* Saving/Loading Methods */
    
 }

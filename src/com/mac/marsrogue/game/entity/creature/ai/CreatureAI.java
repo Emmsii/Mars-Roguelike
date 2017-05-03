@@ -1,5 +1,6 @@
 package com.mac.marsrogue.game.entity.creature.ai;
 
+import com.esotericsoftware.minlog.Log;
 import com.mac.marsrogue.engine.util.Maths.Line;
 import com.mac.marsrogue.engine.util.Maths.Point;
 import com.mac.marsrogue.engine.util.color.ColoredString;
@@ -7,9 +8,12 @@ import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.MessageLog.LogType;
 import com.mac.marsrogue.game.entity.creature.Creature;
 import com.mac.marsrogue.game.entity.creature.ai.behaviour.Behaviour;
+import com.mac.marsrogue.game.entity.item.armor.Armor;
 import com.mac.marsrogue.game.map.object.Door;
 import com.mac.marsrogue.game.map.object.DoorTerminal;
 import com.mac.marsrogue.game.map.object.MapObject;
+
+import java.util.List;
 
 /**
  * Project: Mars Roguelike
@@ -20,9 +24,17 @@ public abstract class CreatureAI {
     protected Creature creature;
     protected Behaviour behaviour;
     
+    protected float aggressivenessWeight;
+    
     public CreatureAI(Creature creature){
         this.creature = creature;
         creature.setAi(this);
+        this.aggressivenessWeight = 0.5f;
+    }
+    
+    public void setWeights(float aggressivenessWeight){
+        this.aggressivenessWeight = aggressivenessWeight;
+                
     }
     
     public abstract void init();
@@ -30,6 +42,64 @@ public abstract class CreatureAI {
     public void update(){
         creature.setMoved(false);
         if(behaviour != null) behaviour.update(creature);
+    }
+
+    public float calculateDangerValue(){
+		
+		/*
+		 * Danger Value is based off:
+		 * 	+ Units Health
+		 * 	+ Count of nearby creatures of same faction
+		 *  + Ammo left
+		 *  + Nearby enemies health
+		 */
+
+        float danger = 1f;
+        float healthValue = ((float) creature.hp() / (float) creature.maxHp()) * 0.65f;
+        int alliesNear = creature.getCreaturesWhoSeeMe(creature.faction()).size() - 1;
+
+        List<Creature> enemiesNear = creature.getCreaturesWhoSeeMe();
+        int enemiesNearCount = 0;
+        int totalMaxHealth = 0;
+        int totalHealth = 0;
+        
+        for(Creature c : enemiesNear){
+            if(c.faction() == null || creature.faction() == null || !c.faction().name().equalsIgnoreCase(creature.faction().name())){
+                totalMaxHealth += c.maxHp();
+                totalHealth += c.hp();
+                enemiesNearCount++;
+            }
+        }
+        
+        float alliesNearValue = alliesNear * 0.25f;
+
+        float enemyHealthValue = totalMaxHealth == 0 ? 0f : ((float) totalHealth / (float) totalMaxHealth) * 0.75f;
+        float enemyNearValue = enemiesNearCount * 0.4f;
+
+        danger -= alliesNearValue;
+        danger -= healthValue;
+
+        danger += enemyHealthValue;
+        danger += enemyNearValue;
+
+        Log.trace("AlliesNearValue: " + alliesNearValue + " HealthValue: " + healthValue + " EnemyHealth: " + enemyHealthValue + " EnemiesNear: " + enemyNearValue);
+        Log.trace("DANGER: " + danger + " (1 - " + alliesNearValue + " - " + healthValue + " + " + enemyHealthValue + " + " + enemyNearValue + ")");
+
+        return danger;
+    }
+
+    public float dangerValueOfCreature(Creature other){
+        float dangerValue = 0f;
+        float weaponValue = 0f;
+        float armorValue = 0f;
+        
+        if(other.weapon() != null) weaponValue += other.weapon().score();
+        for(Armor a : other.armor().values()) if(a != null) armorValue += a.score();
+        
+        dangerValue += weaponValue * 0.5f;
+        dangerValue += armorValue * 0.45f;
+
+        return dangerValue;
     }
 
     public boolean tryMove(int xp, int yp, int zp){
@@ -102,5 +172,9 @@ public abstract class CreatureAI {
 
     public void setBehaviour(Behaviour behaviour){
         this.behaviour = behaviour;
+    }
+    
+    public float aggressivenessWeight(){
+        return aggressivenessWeight;
     }
 }

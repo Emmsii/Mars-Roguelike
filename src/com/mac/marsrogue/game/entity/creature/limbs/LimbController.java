@@ -33,16 +33,20 @@ public class LimbController {
         return pool.get();
     }
     
-    public LimbController addLimb(Limb limb){
-        if(!limbs.contains(limb)) limbs.add(limb);
+    public LimbController addLimb(Limb ... newLimbs){
+        for(Limb l : newLimbs) if(!limbs.contains(l)) limbs.add(l);
         return this;
     }
-    
+        
     public boolean removeLimb(Limb limb){
         return limbs.remove(limb);
     }
     
     public boolean hasLimb(Limb limb){
         return limbs.contains(limb);
+    }
+    
+    public Set<Limb> limbs(){
+        return limbs;
     }
 }

@@ -1,6 +1,8 @@
 package com.mac.marsrogue.game.entity.creature.ai;
 
 import com.mac.marsrogue.game.entity.creature.Creature;
+import com.mac.marsrogue.game.entity.creature.ai.behaviour.AttackCreature;
+import com.mac.marsrogue.game.entity.creature.ai.behaviour.TestBehaviour;
 
 /**
  * Project: Mars Roguelike
@@ -14,6 +16,7 @@ public class EnemyAI extends CreatureAI{
 
     @Override
     public void init() {
-        setBehaviour(null);    
+//        setBehaviour(new AttackCreature(this, creature.map().player()));
+        setBehaviour(new TestBehaviour(this));
     }
 }

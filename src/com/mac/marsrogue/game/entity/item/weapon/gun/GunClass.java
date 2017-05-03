@@ -15,21 +15,23 @@ public class GunClass {
     private char glyph;
     private String baseDamage;
     private String baseAccuracy;
+    private int recommendedRange;
     private float matterCostModifier;
     private List<GunType> allowedTypes;
 
-    public static final GunClass pistol = new GunClass("Pistol", (char) 170, "3-6", "80-95", 1f, GunType.ALL);
-    public static final GunClass rifle = new GunClass("Rifle", (char) 170, "8-12", "80-90", 2f, GunType.AUTOMATIC, GunType.BURST, GunType.SINGLE);
-    public static final GunClass shotgun = new GunClass("Shotgun", (char) 170, "2-4", "45-60", 2.5f, GunType.SPREAD);
-    public static final GunClass longshot = new GunClass("Longshot", (char) 170, "10-20", "80-100", 2.2f, GunType.SINGLE);
+    public static final GunClass pistol = new GunClass("Pistol", (char) 170, "3-6", "80-95", 9, 1f, GunType.ALL);
+    public static final GunClass rifle = new GunClass("Rifle", (char) 170, "8-12", "80-90", 10, 2f, GunType.AUTOMATIC, GunType.BURST, GunType.SINGLE);
+    public static final GunClass shotgun = new GunClass("Shotgun", (char) 170, "2-4", "45-60", 8, 2.5f,GunType.SPREAD);
+    public static final GunClass longshot = new GunClass("Longshot", (char) 170, "10-20", "80-100", 12, 2.2f, GunType.SINGLE);
 
-    public GunClass(String name, char glyph, String baseDamage, String baseAccuracy, float matterCostModifier, GunType ... allowed){
+    public GunClass(String name, char glyph, String baseDamage, String baseAccuracy, int recommendedRange, float matterCostModifier, GunType ... allowed){
         this.name = name;
         this.glyph = glyph;
         this.baseDamage = baseDamage;
         this.baseAccuracy = baseAccuracy;
-        this.allowedTypes = new ArrayList<GunType>();
+        this.recommendedRange = recommendedRange;
         this.matterCostModifier = matterCostModifier;
+        this.allowedTypes = new ArrayList<GunType>();
         for(GunType t : allowed) allowedTypes.add(t);
         GunClass.values.add(this);
     }
@@ -48,6 +50,10 @@ public class GunClass {
 
     public String baseAccuracy(){
         return baseAccuracy;
+    }
+    
+    public int recommendedRange(){
+        return recommendedRange;
     }
 
     public float matterCostModifier(){

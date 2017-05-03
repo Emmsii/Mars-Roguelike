@@ -9,7 +9,7 @@
 		{
 			"name": "Neutral",
 			"relations": [
-				{ "faction": "aggressive", "action": "attack_on_attacked" }
+				{ "faction": "aggressive", "action": "attack_when_attacked" }
 			]
 		},
 		{

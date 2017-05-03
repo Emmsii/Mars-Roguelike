@@ -1,5 +1,6 @@
 package com.mac.marsrogue.game.entity.creature;
 
+import com.esotericsoftware.minlog.Log;
 import com.mac.marsrogue.engine.util.Maths.Line;
 import com.mac.marsrogue.engine.util.Maths.Maths;
 import com.mac.marsrogue.engine.util.Maths.Point;

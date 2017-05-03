@@ -39,6 +39,17 @@ public class StringUtil {
         return text.substring(0, 1).toUpperCase() + text.substring(1);
     }
 
+    public static String capitalizeAll(String text){
+        if(text == null || text.length() == 0) return "null";
+        text = text.toLowerCase();
+        String result = "";
+        for(int i = 0; i < text.length(); i++){
+            if(i == 0 || i > 1 && text.charAt(i - 1) == ' ') result += Character.toString(text.charAt(i)).toUpperCase();
+            else result += text.charAt(i);
+        }
+        return result;
+    }
+
     public static List<String> lineWrap(String text, int width, boolean shiftNewLines){
         String[] words = text.trim().split(" ");
         StringBuilder currentLine = new StringBuilder();

@@ -1,5 +1,7 @@
 package com.mac.marsrogue.game.entity;
 
+import com.mac.marsrogue.engine.util.Maths.*;
+import com.mac.marsrogue.engine.util.Maths.Point;
 import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.map.Map;
 
@@ -61,7 +63,7 @@ public abstract class Entity extends Drawable implements Cloneable{
         return flags;
     }
     
-    public boolean hasFlahs(String flag){
+    public boolean hasFlags(String flag){
         return flag.contains(flag);
     }
     
@@ -75,6 +77,10 @@ public abstract class Entity extends Drawable implements Cloneable{
     
     public void clearFlags(){
         flags.clear();
+    }
+
+    public Point position(){
+        return new Point(x, y, z);
     }
     
     public Entity newInstance(){

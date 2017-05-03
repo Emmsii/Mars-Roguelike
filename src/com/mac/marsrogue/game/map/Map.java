@@ -29,9 +29,9 @@ public class Map {
     private final int width, height, depth;
     
     private FieldOfView fov;
-    
     private BloodMap bloodMap;
     private SootMap sootMap;
+    private DijkstraMaps dijkstraMaps;
     
     private byte[][][] tiles;
     private HashMap<Integer, Point> stairsUp;
@@ -50,7 +50,7 @@ public class Map {
     private Creature player;
 
     public static boolean showDijkstra = false;
-    public static boolean hideFov = true;
+    public static boolean hideFov = false;
     
     //TODO: Move to HashMap<Integer, Integer>
     private int explorableTiles;
@@ -81,6 +81,7 @@ public class Map {
         this.fov = new FieldOfView(this);
         this.bloodMap = new BloodMap(this);
         this.sootMap = new SootMap(this);
+        this.dijkstraMaps = new DijkstraMaps(this);
         
         for(int z = 0; z < depth; z++) {
             creatureList.put(z, new ArrayList<Creature>());
@@ -100,13 +101,31 @@ public class Map {
                 for (int x = 0; x < width; x++) {
                     setExplored(x, y, z, false);
                     setVisible(x, y, z, true);
+                    if(z == 0) if(Tile.getTile(tile(x, y, 0).id) instanceof EmptyTile) explorableTiles++;
                 }
             }
         }
+
+        for(int i = 0; i < positions.length; i++){
+            positions[i] = p;
+            p += ((float) 1 / (float) positions.length) * width;
+        } //TODO: REMOVE ME
     }
     
     public void update(int z){
+        dijkstraMaps.updateApproach(player);
+        if(player.hasMoved()) dijkstraMaps.updateApproach(player);
         
+        List<Creature> creaturesToUpdate = new ArrayList<Creature>(creatures(z));
+        for(Creature c : creaturesToUpdate) c.update();
+
+        List<Item> itemsToUpdate = new ArrayList<Item>(items(z));
+        for(Item i : itemsToUpdate) i.update();
+        
+        List<MapObject> objectsToUpdate = new ArrayList<MapObject>(objects(z));
+        for(MapObject o : objectsToUpdate) o.update();
+        
+        bloodMap.update(z);
     }
 
     /* FOV Methods */
@@ -424,6 +443,12 @@ public class Map {
         return tile(x, y, z).glyph;
     }
 
+    //TODO: REMOVE?
+    Color[] colors = {Color.BLUE, Color.PINK, Color.RED, Color.YELLOW};
+
+    float[] positions = new float[colors.length];
+    float p = 0;
+    
     public Color foregroundColor(int x, int y, int z){
         if(inFov(x, y, z)){
             Creature c = creature(x, y, z);
@@ -438,10 +463,10 @@ public class Map {
             Color decal = decalColor(x, y, z);
             if(decal != null) return decal.brighter();
 
-//            if(Map.showDijkstra){
-//                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null)
-//                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
-//            }
+            if(Map.showDijkstra){
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().test != null)
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.test[x][y]);
+            }
 
             return tile(x, y, z).foregroundColor;
         }
@@ -455,11 +480,11 @@ public class Map {
     public Color backgroundColor(int x, int y, int z){
         if(inFov(x, y, z)){
 
-//            if(Map.showDijkstra){
-//                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null){
-//                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
-//                }
-//            }
+            if(Map.showDijkstra){
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().test != null){
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.test[x][y]);
+                }
+            }
 
             Color decal = decalColor(x, y, z);
             if(decal != null) return decal;
@@ -496,6 +521,10 @@ public class Map {
         return seed;
     }
 
+    public DijkstraMaps dijkstraMaps(){
+        return dijkstraMaps;
+    }
+    
     public BloodMap bloodMap(){
         return bloodMap;
     }

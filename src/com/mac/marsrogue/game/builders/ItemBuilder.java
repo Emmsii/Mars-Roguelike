@@ -7,9 +7,9 @@ import com.mac.marsrogue.engine.util.StringUtil;
 import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.Globals;
 import com.mac.marsrogue.game.codex.Codex;
+import com.mac.marsrogue.game.entity.creature.limbs.Limb;
 import com.mac.marsrogue.game.entity.item.Rarity;
 import com.mac.marsrogue.game.entity.item.armor.Armor;
-import com.mac.marsrogue.game.entity.item.armor.ArmorLocation;
 import com.mac.marsrogue.game.entity.item.blueprint.GunBlueprint;
 import com.mac.marsrogue.game.entity.item.weapon.Explosive;
 import com.mac.marsrogue.game.entity.item.weapon.gun.Gun;
@@ -110,8 +110,14 @@ public class ItemBuilder {
         return explosive;
     }
 
+    public static Armor newArmorOfType(int level, Limb limb, Random random){
+        Armor armor = new Armor('&', Colors.get("orange"), StringUtil.capitalizeAll(limb.prettyName) + " Armor " + random.nextInt(99), "Its armor", limb);
+
+        return armor;
+    }
+    
     public static Armor newArmor(int level, Random random){
-        Armor armor = new Armor('&', Colors.get("orange"), "Armor", "Its armor", ArmorLocation.CHEST);
+        Armor armor = new Armor('&', Colors.get("orange"), "Chest Armor", "Its armor", Limb.TORSO);
 
         return armor;
     }

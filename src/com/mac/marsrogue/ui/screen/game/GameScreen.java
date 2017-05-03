@@ -9,6 +9,7 @@ import com.mac.marsrogue.game.entity.creature.Creature;
 import com.mac.marsrogue.game.MessageLog.LogType;
 import com.mac.marsrogue.game.map.Map;
 import com.mac.marsrogue.ui.screen.Screen;
+import com.mac.marsrogue.ui.screen.game.subscreens.EquipScreen;
 
 
 import java.awt.*;
@@ -70,7 +71,7 @@ public class GameScreen extends Screen {
 //                    else subscreen = new FireWeaponScreen(player, player.x - mapScreen.getScrollX(), player.y - mapScreen.getScrollY(), true);
 //                    break;
 //                case KeyEvent.VK_B: subscreen = new BlueprintScreen(player); break;
-//                case KeyEvent.VK_E: subscreen = new EquipScreen(player); break;
+                case KeyEvent.VK_E: subscreen = new EquipScreen(player); break;
 //                case KeyEvent.VK_L: subscreen = new ExamineScreen(player, player.x - mapScreen.getScrollX(), player.y - mapScreen.getScrollY(), true); break;
 //                case KeyEvent.VK_T: subscreen = new ThrowScreen(player, player.x - mapScreen.getScrollX(), player.y - mapScreen.getScrollY()); break;
                 case KeyEvent.VK_P: player.pickup(); break;

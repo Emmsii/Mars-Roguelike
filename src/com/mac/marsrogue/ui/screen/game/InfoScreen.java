@@ -1,14 +1,23 @@
 package com.mac.marsrogue.ui.screen.game;
 
+import com.esotericsoftware.minlog.Log;
 import com.mac.marsrogue.engine.ascii.AsciiPanel;
+import com.mac.marsrogue.engine.util.StringUtil;
+import com.mac.marsrogue.engine.util.Timer;
 import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.entity.creature.Creature;
+import com.mac.marsrogue.game.entity.creature.limbs.Limb;
+import com.mac.marsrogue.game.entity.item.armor.Armor;
 import com.mac.marsrogue.game.entity.item.weapon.gun.Gun;
 import com.mac.marsrogue.game.entity.item.weapon.gun.GunProjectile;
 import com.mac.marsrogue.ui.screen.Screen;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 
 /**
  * Project: Mars Roguelike
@@ -78,19 +87,42 @@ public class InfoScreen extends Screen{
         }
 
         yp++;
-        if(creature.head() != null){
-            panel.write(creature.head().name(), xp, yp++);
-            panel.write("MORE STATS GO HERE", xp, yp++);
-        }
+//        if(creature.head() != null){
+//            panel.write(creature.head().name(), xp, yp++);
+//            panel.write("MORE STATS GO HERE", xp, yp++);
+//        }
+//
+//        if(creature.chest() != null){
+//            panel.write(creature.chest().name(), xp, yp++);
+//            panel.write("MORE STATS GO HERE", xp, yp++);
+//        }
+//
+//        if(creature.legs() != null){
+//            panel.write(creature.legs().name(), xp, yp++);
+//            panel.write("MORE STATS GO HERE", xp, yp++);
+//        }
 
-        if(creature.chest() != null){
-            panel.write(creature.chest().name(), xp, yp++);
-            panel.write("MORE STATS GO HERE", xp, yp++);
-        }
+        yp++;
+        
+        ArrayList<Limb> orderedLimbs = new ArrayList<Limb>();
+        orderedLimbs.addAll(creature.limbController().limbs());
+        
+        Collections.sort(orderedLimbs, new Comparator<Limb>() {
+            @Override
+            public int compare(Limb a, Limb b) {
+                if(a.order > b.order) return 1;
+                else if(a.order < b.order) return -1;
+                return 0;
+            }
+        });
 
-        if(creature.legs() != null){
-            panel.write(creature.legs().name(), xp, yp++);
-            panel.write("MORE STATS GO HERE", xp, yp++);
+        for(Limb l : orderedLimbs){
+            
+            panel.write(StringUtil.capitalizeAll(l.prettyName), xp, yp++, Colors.get("gray"));
+            Armor a = creature.armor(l);
+            if(a == null) panel.write("Nothing", xp + 1, yp++);
+            else panel.write(a.name(), xp + 1, yp++);
+            yp++;
         }
 
 
