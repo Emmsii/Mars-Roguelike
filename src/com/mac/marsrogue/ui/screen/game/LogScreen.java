@@ -6,6 +6,7 @@ import com.mac.marsrogue.engine.util.color.ColoredString;
 import com.mac.marsrogue.game.MessageLog;
 import com.mac.marsrogue.ui.screen.Screen;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -46,7 +47,8 @@ public class LogScreen extends Screen{
             int get = log.getEntries().size() - i - 1;
             if(get < 0) continue;
             ColoredString entry = log.getEntries().get(get);
-            panel.write(entry.text, x + 1, y + height - 2 - i, entry.color);
+            Color color = i >= log.newEntries() ? entry.color.darker().darker() : entry.color;
+            panel.write(entry.text, x + 1, y + height - 2 - i, color);
         }
         log.resetNewEntryCount();
     }
