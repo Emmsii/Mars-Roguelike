@@ -8,6 +8,7 @@ import com.mac.marsrogue.engine.io.loaders.ItemLoader;
 import com.mac.marsrogue.engine.util.Timer;
 import com.mac.marsrogue.engine.io.loaders.ColorLoader;
 import com.mac.marsrogue.engine.io.Config;
+import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.Game;
 import com.mac.marsrogue.engine.ascii.*;
 import com.mac.marsrogue.ui.screen.game.GameScreen;
@@ -24,7 +25,7 @@ public class MarsRogue {
     public static final String TITLE = "Mars Rogue";
     public static final String VERSION = "v0.1";
     
-    public static final AsciiFont FONT = AsciiFont.DRAKE_10x10;
+    public static final AsciiFont FONT = AsciiFont.CP437_10x10;
     
     private static final int WIDTH = 16;
     private static final int HEIGHT = 9;
@@ -49,6 +50,8 @@ public class MarsRogue {
         };
         
         panel = terminal.getAsciiPanel();
+        panel.setDefaultForegroundColor(Colors.get("default_fg"));
+        panel.setDefaultBackgroundColor(Colors.get("default_bg"));
         
         game = new Game();
         game.init();

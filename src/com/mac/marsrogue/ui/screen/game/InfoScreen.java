@@ -42,10 +42,14 @@ public class InfoScreen extends Screen{
 
         yp++;
 
-        writeStat(panel, "Health", creature.hp() + "/" + creature.maxHp(), xp, yp++, null, null, 1);
-        writeStat(panel, "Armor", "1000/1000", xp, yp++, null, null, 1);
-        writeStat(panel, "Armor Charge", "87%", xp, yp++, null, null, 1);
-
+//        writeStat(panel, "Health", creature.hp() + "/" + creature.maxHp(), xp, yp++, null, null, 1);
+//        writeStat(panel, "Armor", "1000/1000", xp, yp++, null, null, 1);
+//        writeStat(panel, "Armor Charge", "87%", xp, yp++, null, null, 1);
+        drawBar(panel, xp + 1, yp, "HP " + creature.hp() + "/" + creature.maxHp(), creature.hp(), creature.maxHp(), 23, Colors.get("default_bg"), Colors.get("health_bar"), Colors.get("health_bar").darker());
+        drawBar(panel, xp + 1, yp+=2, "Armor 10/1000", 10, 1000, 23, Colors.get("default_bg"), Colors.get("armor_hp_bar"), Colors.get("armor_hp_bar").darker());
+        drawBar(panel, xp + 1, yp+=2, "Armor Charge 87%", 87, 100, 23, Colors.get("default_bg"), Colors.get("armor_charge_bar"), Colors.get("armor_charge_bar").darker());
+        yp++;
+        
         if(creature.weapon() != null){
             yp++;
             if(creature.weapon() instanceof Gun){

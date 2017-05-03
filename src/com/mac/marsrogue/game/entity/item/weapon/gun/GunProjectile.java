@@ -10,14 +10,16 @@ import java.awt.*;
  */
 public enum GunProjectile {
 
-    BOLT(0.5f, Colors.get("bolt"), false), LASER(0.75f, Colors.get("laser"), false), SLUG(1f, Colors.get("slug"), false);
+    BOLT(0.5f, 1.25f, Colors.get("bolt"), false), LASER(0.75f, 1.5f, Colors.get("laser"), false), SLUG(1f, 1f, Colors.get("slug"), false);
 
     public float damageModifier;
+    public float matterCostModifier;
     public Color color;
     public boolean causesBleeding;
 
-    private GunProjectile(float damageModifier, Color color, boolean causesBleeding) {
+    private GunProjectile(float damageModifier, float matterCostModifier, Color color, boolean causesBleeding) {
         this.damageModifier = damageModifier;
+        this.matterCostModifier = matterCostModifier;
         this.color = color;
         this.causesBleeding = causesBleeding;
     }

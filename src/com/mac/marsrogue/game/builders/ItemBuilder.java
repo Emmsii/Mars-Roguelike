@@ -5,6 +5,7 @@ import com.mac.marsrogue.engine.util.Maths.Maths;
 import com.mac.marsrogue.engine.util.Pool;
 import com.mac.marsrogue.engine.util.StringUtil;
 import com.mac.marsrogue.engine.util.color.Colors;
+import com.mac.marsrogue.game.Globals;
 import com.mac.marsrogue.game.codex.Codex;
 import com.mac.marsrogue.game.entity.item.Rarity;
 import com.mac.marsrogue.game.entity.item.armor.Armor;
@@ -23,7 +24,7 @@ import java.util.Random;
  * Created by Matt on 01/05/2017 at 03:32 PM.
  */
 public class ItemBuilder {
-
+    
     public static void createGunBlueprints(int depth, int minPerLevel, int maxPerLevel, float chancePerLevel, Random random){
         Log.info("Creating gun blueprints...");
         int created = 0;
@@ -32,8 +33,8 @@ public class ItemBuilder {
                 int count = Maths.range(minPerLevel, maxPerLevel, random);
                 for(int i = 0; i < count; i++){
                     Gun gun = newGun(z, random);
-                    GunBlueprint gunBluerint = new GunBlueprint(gun.name() + " " + gun.type().name() + " Blueprint", "description", gun);
-                    Codex.addBlueprint(gunBluerint, z);
+                    GunBlueprint gunBlueprint = new GunBlueprint(gun.name() + " " + gun.type().name() + " Blueprint", "description", gun);
+                    Codex.addBlueprint(gunBlueprint, z);
                     created++;
                 }
                 Log.trace("Created " + count + " gun blueprints for level " + z);
@@ -42,17 +43,6 @@ public class ItemBuilder {
             }
         }
         Log.debug("Created " + created + " gun blueprints.");
-    }
-
-    public static Explosive newExplosive(int level, Random random){
-        Explosive explosive = new Explosive((char) 7, Colors.get("grenade"), "Grenade", "Explodes.");
-        return explosive;
-    }
-    
-    public static Armor newArmor(int level, Random random){
-        Armor armor = new Armor('&', Colors.get("orange"), "Armor", "Its armor", ArmorLocation.CHEST);
-
-        return armor;
     }
 
     public static Gun newGun(int level, Random random){
@@ -69,7 +59,6 @@ public class ItemBuilder {
 
         float damageMultiplier = 1 + Maths.randomizer(type.damageModifier * projectile.damageModifier * levelModifier * rairity.multiplier, 0.25f, random);
         String damage = multiplyDamage(gunClass.baseDamage(), damageMultiplier);
-        //		float accuracy = Maths.clamp(Maths.randomizer(gunClass.baseAccuracy(), 0.20f, random));
         int accuracy = StringUtil.parseString(gunClass.baseAccuracy());
         int finalAccuracy = (int) (accuracy + (accuracy * ((rairity.multiplier - 1) / 3)));
         if(finalAccuracy > 100) finalAccuracy = 100;
@@ -94,6 +83,8 @@ public class ItemBuilder {
         int clipSize = (int) Maths.randomizer(type.clipSize, 0.25f, random);
         int finalClipSize = (int) (clipSize + ((clipSize * (rairity.multiplier - 1)) / 2));
 
+        int matterCost = (int) (Gun.BASE_MATTER_COST * gunClass.matterCostModifier() * projectile.matterCostModifier * Maths.randomizer(0.9f, 1.1f, random) * Globals.GUN_MATTER_COST_MULTIPLIER);
+
         //		System.out.println("------ New Gun (" + level + ") -------");
         //		System.out.println("Rarity: " + rairity + " (+" + rairity.multiplier + ")");
         //		System.out.println("Class: " + gunClass.name());
@@ -107,16 +98,25 @@ public class ItemBuilder {
         //		System.out.println("Clip Size: " + finalClipSize + "(" + clipSize + ")");
         //		
 
-        //TODO: SET GUN COLOR FROM PROJECTILE TYPE
         String name = NameBuilder.generateGunName(random);
-        Gun gun = new Gun(gunClass.glyph(), Colors.get("default_gun"), name, "Gun description goes here");
-        gun.setStats(damage, accuracy, fireRate, finalClipSize, gunClass, projectile, type, rairity);
-        gun.score();
+        Gun gun = new Gun(gunClass.glyph(), projectile.color, name, "Gun description goes here");
+        gun.setStats(damage, accuracy, fireRate, finalClipSize, gunClass, projectile, type, matterCost, rairity);
+
         return gun;
     }
 
+    public static Explosive newExplosive(int level, Random random){
+        Explosive explosive = new Explosive((char) 7, Colors.get("grenade"), "Grenade", "Explodes.");
+        return explosive;
+    }
+
+    public static Armor newArmor(int level, Random random){
+        Armor armor = new Armor('&', Colors.get("orange"), "Armor", "Its armor", ArmorLocation.CHEST);
+
+        return armor;
+    }
+
     private static String multiplyDamage(String damage, float amount){
-        //		System.out.println("Damage: " + damage + " * " + amount);
         String[] split = damage.split("-");
         int min = Math.round(Integer.parseInt(split[0]) * amount);
         int max = Math.round(Integer.parseInt(split[1]) * amount);

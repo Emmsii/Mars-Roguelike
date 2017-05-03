@@ -6,11 +6,13 @@ import com.mac.marsrogue.game.builders.CreatureBuilder;
 import com.mac.marsrogue.game.builders.ItemBuilder;
 import com.mac.marsrogue.game.builders.MapBuilder;
 import com.mac.marsrogue.game.entity.creature.Creature;
+import com.mac.marsrogue.game.entity.creature.limbs.Limb;
 import com.mac.marsrogue.game.entity.item.blueprint.Blueprint;
 import com.mac.marsrogue.game.entity.item.blueprint.GunBlueprint;
 import com.mac.marsrogue.game.entity.item.weapon.gun.Gun;
 import com.mac.marsrogue.game.map.Map;
 import com.mac.marsrogue.game.MessageLog.LogType;
+import com.mac.marsrogue.game.map.tile.Tile;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -33,21 +35,22 @@ public class Game {
         logs.put(LogType.COMBAT, new MessageLog());
         logs.put(LogType.MESSAGE, new MessageLog());
 
-        map = new MapBuilder(136, 136, 30, 8).generate().build();
-
+//        map = new MapBuilder(136, 136, 30, 8).generate().build();
+        map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.01f, Tile.wallCenter).build();
+        
         ItemBuilder.createGunBlueprints(map.depth(), 3, 12, 0.8f, random);
 
         //		map.showTileImage();
 
         //		map = new MapDecorator(map).decorate().simulate(0, 0).finish();
-        //		map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.01f, Tile.wallCenter).build();
+        		
         //		FileHandler.saveMap(map);
 
         //		Pathfinder.instance().init(map);
         AStar.instance().init(map);
 
         player = CreatureBuilder.newPlayer(logs);
-
+        
         for(int i = 0; i < 10; i++){
             Gun gun = ItemBuilder.newGun(0, random);
             Blueprint gunBp = new GunBlueprint(gun.name() + " Blueprint", "Its a blueprint", gun);
@@ -74,7 +77,7 @@ public class Game {
             //			map.add(ItemBuilder.newGun(0, random), map.randomEmptyPoint(0));
             //			map.add(ItemBuilder.newRawMatter(0), map.randomEmptyPoint(0));
 
-            Creature mob = CreatureBuilder.newTestEnemy();
+            Creature mob = CreatureBuilder.newAndroid();
             mob.inventory().add(ItemBuilder.newGun(0, random));
             //			for(int j = 0; j < random.nextInt(4); j++) mob.inventory().add(ItemBuilder.newGun(0, random));
             Gun g = ItemBuilder.newGun(0, random);

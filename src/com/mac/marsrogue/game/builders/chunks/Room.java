@@ -5,7 +5,7 @@ import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.builders.MapBuilder;
 import com.mac.marsrogue.game.map.Map;
 import com.mac.marsrogue.game.map.object.Door;
-import com.mac.marsrogue.game.map.object.Terminal;
+import com.mac.marsrogue.game.map.object.DoorTerminal;
 import com.mac.marsrogue.game.map.tile.Tile;
 
 import java.util.ArrayList;
@@ -139,8 +139,8 @@ public class Room extends Chunk{
                     else cy -= 1;
 
                     //					map.placeTerminal(cx, cy, z, linkedDoor);
-                    //					map.add(new Terminal((char) 241, new Color(76, 140, 83), linkedDoor, "Terminal", "Used to lock and unlock doors"), new Point(cx, cy, z));
-                    new Terminal((char) 241, Colors.get("terminal_fg"), linkedDoor, "Terminal", "Used to lock and unlock doors").place(map, new Point(cx, cy, z));
+                    //					map.add(new DoorTerminal((char) 241, new Color(76, 140, 83), linkedDoor, "DoorTerminal", "Used to lock and unlock doors"), new Point(cx, cy, z));
+                    new DoorTerminal((char) 241, Colors.get("terminal_fg"), linkedDoor, "DoorTerminal", "Used to lock and unlock doors").place(map, new Point(cx, cy, z));
 
                     if(xp0 != 0) cx -= 2;
                     else cx += 2;
@@ -148,8 +148,8 @@ public class Room extends Chunk{
                     else cy += 2;
 
                     //					map.placeTerminal(cx, cy, z, linkedDoor);
-                    //					map.add(new Terminal((char) 241, new Color(76, 140, 83), linkedDoor, "Terminal", "Used to lock and unlock doors"), new Point(cx, cy, z));
-                    new Terminal((char) 241, Colors.get("terminal_fg"), linkedDoor, "Terminal", "Used to lock and unlock doors").place(map, new Point(cx, cy, z));
+                    //					map.add(new DoorTerminal((char) 241, new Color(76, 140, 83), linkedDoor, "DoorTerminal", "Used to lock and unlock doors"), new Point(cx, cy, z));
+                    new DoorTerminal((char) 241, Colors.get("terminal_fg"), linkedDoor, "DoorTerminal", "Used to lock and unlock doors").place(map, new Point(cx, cy, z));
                 }
             }
         }

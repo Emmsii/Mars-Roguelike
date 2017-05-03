@@ -65,6 +65,15 @@ public abstract class Screen {
         }
     }
 
+    public void drawBar(AsciiPanel panel, int x, int y, String label, int value, int max, int width, Color labelColor, Color front, Color back){
+        for(int i = 0; i < width; i++){
+            float a = (float) i / (float) width;
+            float b = (float) value / (float) max;
+            char ch = i >= label.length() ? ' ' : label.charAt(i);
+            panel.write(ch, x + i, y, labelColor, b <= a ? back : front);
+        }
+    }
+    
     public void drawLine(AsciiPanel panel, int sx, int sy, int ex, int ey, char glyph, Color color, boolean skipEnds){
         Line line = new Line(sx, sy, ex, ey);
         for(int i = skipEnds ? 1 : 0; i < line.length() - (skipEnds ? 1 : 0); i++){

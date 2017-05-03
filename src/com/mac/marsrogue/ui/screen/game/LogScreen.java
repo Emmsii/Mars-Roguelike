@@ -40,7 +40,7 @@ public class LogScreen extends Screen{
 
     @Override
     public void render(AsciiPanel panel) {
-        setTitle(defaultTitle + "(" + log.newEntries() + ")");
+        setTitle(defaultTitle + " (" + log.newEntries() + ")");
         clearWithBorder(panel, true);
         for(int i = 0 ; i < messageCount; i++){
             int get = log.getEntries().size() - i - 1;

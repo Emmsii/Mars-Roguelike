@@ -38,9 +38,9 @@ public class MapScreen extends Screen{
         map.computeFov(player.x, player.y, player.z, player.awareness(), FOVType.SHADOWCAST);
 
         for(int ya = 1; ya < height - 1; ya++){
-            int yp = ya + getScrollY();
+            int yp = ya + getScrollY() - 1;
             for(int xa = 1; xa < width - 1; xa++){
-                int xp = xa + getScrollX();
+                int xp = xa + getScrollX() - 1;
 
                 if(Map.hideFov) if(!map.isExplored(xp, yp, player.z)) continue;
                 if(map.tile(xp, yp, player.z) == Tile.boundsTile) continue;

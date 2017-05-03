@@ -23,8 +23,8 @@ public class CreatureBuilder {
         return colonist;
     }
 
-    public static Creature newTestEnemy(){
-        Creature enemy = (Creature) Codex.creatures.get("enemy").newInstance();
+    public static Creature newAndroid(){
+        Creature enemy = (Creature) Codex.creatures.get("android").newInstance();
         new EnemyAI(enemy);
         return enemy;
     }

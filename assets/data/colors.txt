@@ -11,6 +11,7 @@ gray: 130, 130, 130
 light_gray: 200, 200, 200
 white: 230, 234, 235
 black: 15, 15, 15 
+brown: 130, 90, 57
 
 # UI
 default_fg: 223, 239, 215
@@ -18,13 +19,17 @@ default_bg: 20, 12, 28
 border: 77, 73, 77
 dark_text: 40, 40, 40
 ui_target_line: 200, 200, 10
+health_bar: 207, 50, 50
+armor_hp_bar: 170, 170, 170
+armor_charge_bar: 35, 118, 235
+
 
 # CREATURES
 player: 256, 256, 256
 colonist: 150, 150, 150
 enemy: 150, 153, 77
 
-alien_blood: 71, 87, 32
+android_blood: 71, 87, 32
 human_blood: 112, 46, 36
 
 # ITEMS

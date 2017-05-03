@@ -12,8 +12,12 @@ import java.awt.*;
  */
 public class Gun extends Weapon {
 
+    public static final float BASE_MATTER_COST = 1.5f;
+    
     protected Rarity rarity;
 
+    protected int matterCost;
+    
     protected String damage;
     protected int accuracy;
     protected GunClass gunClass;
@@ -29,7 +33,7 @@ public class Gun extends Weapon {
         super(glyph, color, name, description);
     }
 
-    public void setStats(String damage, int accuracy, String fireRate, int clipSize, GunClass gunClass, GunProjectile projectile, GunType type, Rarity rarity){
+    public void setStats(String damage, int accuracy, String fireRate, int clipSize, GunClass gunClass, GunProjectile projectile, GunType type, int matterCost, Rarity rarity){
         this.damage = damage;
         this.accuracy = accuracy;
         this.projectile = projectile;
@@ -37,6 +41,7 @@ public class Gun extends Weapon {
         this.type = type;
         this.clipSize = clipSize;
         this.fireRate = fireRate;
+        this.matterCost = matterCost;
         this.rarity = rarity;
     }
 
@@ -98,6 +103,10 @@ public class Gun extends Weapon {
         return clips;
     }
 
+    public int matterCost(){
+        return matterCost;
+    }
+    
     public Rarity rarity(){
         return rarity;
     }

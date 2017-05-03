@@ -9,6 +9,14 @@
 			"awareness": 20,
 			"blood_type": "human",
 			"faction": "friendly",
+			"limbs":[
+				{ "name": "HEAD" },
+				
+				{ "name": "ARM_LEFT" },
+				{ "name": "ARM_RIGHT" },
+				{ "name": "LEG_LEFT" },
+				{ "name": "LEG_RIGHT" }
+			],
 			"flags":[
 				{ "name": "BLEEDING" },
 				{ "name": "TEST" }
@@ -16,14 +24,22 @@
 		},
 		
 		{
-			"name": "Enemy",
+			"name": "Android",
 			"description": "Description of enemy goes here",
 			"glyph": "A",
 			"color": "enemy",
 			"max_hp": 100,
 			"awareness": 20,
-			"blood_type": "alien",
-			"faction": "aggressive"
+			"blood_type": "android",
+			"faction": "aggressive",
+			"limbs":[
+				{ "name": "HEAD" },
+				{ "name": "TORSO" },
+				{ "name": "ARM_LEFT" },
+				{ "name": "ARM_RIGHT" },
+				{ "name": "LEG_LEFT" },
+				{ "name": "LEG_RIGHT" }
+			]
 		}
 	]
 }

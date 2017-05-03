@@ -13,9 +13,8 @@ public enum AsciiFont {
     DRAKE_10x10("drake_10x10.png", 10, 10),
     TAFFER_10x10("taffer_10x10.png", 10, 10),
     QBICFEET_10x10("qbicfeet_10x10.png", 10, 10),
-    TALRYTH_15_15("talryth_square_15x15.png", 15, 15),
-    LORD_NIGHTMARE_4x6("Lord-Nightmare-Terminal-4x6.png", 4, 9);
-
+    TALRYTH_15_15("talryth_square_15x15.png", 15, 15);
+    
     private String fontFilename;
 
     public String getFontFilename() {

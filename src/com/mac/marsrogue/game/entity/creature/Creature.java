@@ -8,6 +8,7 @@ import com.mac.marsrogue.engine.util.color.ColoredString;
 import com.mac.marsrogue.engine.util.color.Colors;
 import com.mac.marsrogue.game.entity.Entity;
 import com.mac.marsrogue.game.entity.creature.ai.CreatureAI;
+import com.mac.marsrogue.game.entity.creature.limbs.LimbController;
 import com.mac.marsrogue.game.entity.item.Equipable;
 import com.mac.marsrogue.game.entity.item.Inventory;
 import com.mac.marsrogue.game.entity.item.Item;
@@ -16,6 +17,7 @@ import com.mac.marsrogue.game.entity.item.weapon.Explosive;
 import com.mac.marsrogue.game.entity.item.weapon.Weapon;
 import com.mac.marsrogue.game.map.Map;
 import com.mac.marsrogue.game.MessageLog.LogType;
+import com.mac.marsrogue.game.map.object.DoorTerminal;
 import com.mac.marsrogue.game.map.object.Terminal;
 
 import java.awt.Color;
@@ -28,6 +30,8 @@ import java.util.List;
  */
 public class Creature extends Entity{
 
+    protected LimbController limbController;
+    
     protected Weapon weapon;
     protected Armor head;
     protected Armor chest;
@@ -52,6 +56,7 @@ public class Creature extends Entity{
     
     public Creature(char glyph, Color foregroundColor, String name, String description, Color bloodType, Faction faction) {
         super(glyph, foregroundColor, name, description);
+        this.limbController = new LimbController();
         this.inventory = new Inventory<Item>();
         this.faction = faction;
     }
@@ -335,12 +340,16 @@ public class Creature extends Entity{
         this.hasUsedEquipment = hasUsedEquipment;
     }
 
-    public void setTerminal(Terminal terminal){
+    public void setTerminal(DoorTerminal terminal){
         this.terminal = terminal;
     }
     
     /* Getter Methods */
 
+    public LimbController limbController(){
+        return limbController;
+    }
+    
     public Inventory<Item> inventory(){
         return inventory;
     }

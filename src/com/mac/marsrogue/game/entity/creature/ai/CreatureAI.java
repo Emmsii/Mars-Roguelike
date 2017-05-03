@@ -4,13 +4,12 @@ import com.mac.marsrogue.engine.util.Maths.Line;
 import com.mac.marsrogue.engine.util.Maths.Point;
 import com.mac.marsrogue.engine.util.color.ColoredString;
 import com.mac.marsrogue.engine.util.color.Colors;
-import com.mac.marsrogue.game.MessageLog;
 import com.mac.marsrogue.game.MessageLog.LogType;
 import com.mac.marsrogue.game.entity.creature.Creature;
 import com.mac.marsrogue.game.entity.creature.ai.behaviour.Behaviour;
 import com.mac.marsrogue.game.map.object.Door;
+import com.mac.marsrogue.game.map.object.DoorTerminal;
 import com.mac.marsrogue.game.map.object.MapObject;
-import com.mac.marsrogue.game.map.object.Terminal;
 
 /**
  * Project: Mars Roguelike
@@ -75,8 +74,8 @@ public abstract class CreatureAI {
                 return true;
             }
             return true;
-        } else if(obj instanceof Terminal){
-            Terminal t = (Terminal) obj;
+        } else if(obj instanceof DoorTerminal){
+            DoorTerminal t = (DoorTerminal) obj;
             creature.setTerminal(t);
         }
 
