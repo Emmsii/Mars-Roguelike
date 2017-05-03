@@ -86,6 +86,7 @@ public class Dijkstra {
     }
 
     public static Point rollDown(Point start, int[][] input, int offset, int stopAt){
+        Log.trace("Rolling down");
         if(start.x < 0 || start.y < 0 || start.x >= input.length || start.y >= input[0].length){
             Log.warn("Cannot roll down dijkstra map, input point out of bounds: " + start);
             return start;
@@ -98,7 +99,7 @@ public class Dijkstra {
         int lowestCardinal = Integer.MAX_VALUE;
         for(Point n : start.neighboursCardinal()){
             int in = input[n.x][n.y] + offset;
-            if(in == FILL) continue;
+            if(in == FILL || in > input.length * input[0].length) continue;
             if(in < lowestCardinal && in >= stopAt){
                 lowestCardinal = in;
                 pointCardinal = n;
@@ -109,7 +110,7 @@ public class Dijkstra {
         int lowestDiagonal = Integer.MAX_VALUE;
         for(Point n : start.neighboursDiagonal()){
             int in = input[n.x][n.y] + offset;
-            if(in == FILL) continue;
+            if(in == FILL || in > input.length * input[0].length) continue;
             if(in < lowestDiagonal && in >= stopAt){
                 lowestDiagonal = in;
                 pointDiagonal = n;
@@ -127,14 +128,13 @@ public class Dijkstra {
         }
 
         if(input[start.x][start.y] + offset == stopAt) return start;
-        
         else if(input[start.x][start.y] + offset > stopAt) return rollDown(start, input, offset, stopAt);
         
         Point pointCardinal = start;
         int highestCardinal = Integer.MIN_VALUE;
         for(Point n : start.neighboursCardinal()){
             int in = input[n.x][n.y] + offset;
-            if(in == FILL) continue;
+            if(in == FILL || in > input.length * input[0].length) continue;
             if(in > highestCardinal){
                 highestCardinal = in;
                 pointCardinal = n;
@@ -145,7 +145,7 @@ public class Dijkstra {
         int highestDiagonal = Integer.MIN_VALUE;
         for(Point n : start.neighboursDiagonal()){
             int in = input[n.x][n.y] + offset;
-            if(in == FILL) continue;
+            if(in == FILL || in > input.length * input[0].length) continue;
             if(in > highestDiagonal){
                 highestDiagonal = in;
                 pointDiagonal = n;

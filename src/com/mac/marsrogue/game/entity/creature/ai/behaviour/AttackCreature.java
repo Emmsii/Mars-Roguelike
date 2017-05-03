@@ -16,9 +16,6 @@ import com.mac.marsrogue.game.entity.item.weapon.gun.Gun;
 public class AttackCreature extends Behaviour{
     
     private Creature target;
-    private boolean canSee;
-    private Point lastSeen;
-    private int agroCooldown;
     
     public AttackCreature(CreatureAI ai, Creature target){
         super(ai);
@@ -27,76 +24,75 @@ public class AttackCreature extends Behaviour{
     
     @Override
     public void update(Creature creature) {
-        
+
+        /**
+         * If creature does not have weapon
+         *      set behaviour to FindWeapon 
+         */
         if(creature.weapon() == null){
             ai.setBehaviour(new FindWeapon(ai));
+            return;
         }
         
         if(creature.canSee(target)){
-            canSee = true;
-            lastSeen = target.position();
-            agroCooldown = 4;
-        }
 
-        Point creaturePos = creature.position();
-        Point next = creaturePos;
-        
-        if(canSee){
-            Log.trace("Creature can see target!");
+
+            /**
+             * If creature can see target
+             *      If creature is in range, fire weapon
+             *      else move towards target
+             */
+            
             Gun gun = (Gun) creature.weapon();
-            
-            float generalDanger = creature.ai().calculateDangerValue();
-            float targetDanger = creature.ai().dangerValueOfCreature(target);
-            float selfDanger = creature.ai().dangerValueOfCreature(creature);
+            Point creaturePos = creature.position();
+            Point next = creaturePos;
 
-            int distance = Maths.distance(creature.x, creature.y, target.x, target.y);
-            float distDanger = 3f / (distance * 1.25f) - 0.25f;
+            int distanceToTarget = Maths.distance(creature.x, creature.y, target.x, target.y);
             
-            float totalDanger = (targetDanger - selfDanger) + generalDanger + distDanger;
+            float areaDanger = ai.dangerValueOfArea();
+            float targetDanger = ai.dangerValueOfCreature(target);
+            float selfDanger = ai.dangerValueOfCreature(creature);
+            float distanceDanger = 3f / (distanceToTarget * 1.25f) - 0.2f;
             
-//            int r = Math.min(creature.awareness(), gun.gunClass().recommendedRange());
-////            int range = (int) (r + (r * (totalDanger / 2)));
-//            int range = r;
+            float totalDanger = (targetDanger - selfDanger) + areaDanger + distanceDanger;
             
-            int range = (int) (creature.awareness() * 0.75f);
-            
-            Log.trace("General Danger: " + generalDanger);
-            Log.trace("Target Danger: " + targetDanger + " Self Danger: " + selfDanger + " Total: " + totalDanger);
-            Log.trace("Range: " + range + " (Recommended: " + gun.gunClass().recommendedRange() + ")");
-            
-            if(inRange(creature.x, creature.y, target.x, target.y, range)){
-                Log.trace("Creature is in range!");                
-                //If creature is in range of target
-                //Creature should move back IF DANGER VALUE IS HIGH ENOUGH
+            if(creature.id() == 1) {
+                Log.trace("Area Danger: " + areaDanger);
+                Log.trace("Target Danger: " + targetDanger);
+                Log.trace("Self Danger: " + selfDanger);
+                Log.trace("Distance Danger: " + distanceDanger);
+                Log.trace("Total Danger: " + totalDanger);
+            }
 
-                if(totalDanger * 0.25 >= (1f - ai.aggressivenessWeight())){
-                    Log.trace("Creature moving back");
-                    next = Dijkstra.rollUp(creaturePos, creature.map().dijkstraMaps().approach(), -range, 0);
+            /**
+             * Danger < 0, creature feels pretty safe, will be aggressive
+             * Danger > 0, creature will be more cautious
+             * Danger += ai confidence value min -0.5 0.5
+             */
+
+            int range = gun.gunClass().recommendedRange();
+            
+            
+            if(distanceToTarget <= range){
+                
+                if(distanceToTarget <= range * 0.45f){
+                    next = Dijkstra.rollDown(creaturePos, creature.map().dijkstraMaps().approach(), -range, 0);    
                 }else{
-                    //FIRE WEAPON
-                    Log.info("PEW PEW");
-                    new CombatManager(creature, null).fireWeapon(target.x, target.y);
+                    new CombatManager(creature, null).fireWeapon(target.x, target.y);    
                 }
             }else{
-                //Run away?
-                Log.trace(Maths.distance(creature.x, creature.y, target.x, target.y) + " DISTANCE");
-                Log.info("Not in range. Moving towards!");
-                next = Dijkstra.rollDown(creaturePos, creature.map().dijkstraMaps().approach(), range, 0);
+                next = Dijkstra.rollDown(creaturePos, creature.map().dijkstraMaps().approach(), -range, 0);
+            }
+            
+            if(!next.equals(creaturePos)){
+                int mx = next.x - creature.x;
+                int my = next.y - creature.y;
+                creature.moveBy(mx, my, 0);
             }
         }else{
-
-            wander(0.25f, creature);                
-            return;
+            wander(0.25f, creature);
         }
-        Log.trace("Creature Pos " + creaturePos + " Next " + next);
-        if(!next.equals(creaturePos)){
-            int mx = next.x - creature.x;
-            int my = next.y - creature.y;
-            creature.moveBy(mx, my, 0);
-        }else{
-            if(!creature.canSee(target)) canSee = false;
-            agroCooldown--;
-        }
+        
     }
 
     private void wander(float frequency, Creature creature){
@@ -106,8 +102,5 @@ public class AttackCreature extends Behaviour{
             creature.moveBy(x, y, 0);
         }
     }
-    
-    private boolean inRange(int x, int y, int xt, int yt, int range){
-        return Maths.distance(x, y, xt, yt) <= range;
-    }
+
 }

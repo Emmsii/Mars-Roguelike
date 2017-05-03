@@ -113,7 +113,6 @@ public class Map {
     }
     
     public void update(int z){
-        dijkstraMaps.updateApproach(player);
         if(player.hasMoved()) dijkstraMaps.updateApproach(player);
         
         List<Creature> creaturesToUpdate = new ArrayList<Creature>(creatures(z));
@@ -464,8 +463,8 @@ public class Map {
             if(decal != null) return decal.brighter();
 
             if(Map.showDijkstra){
-                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().test != null)
-                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.test[x][y]);
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null)
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
             }
 
             return tile(x, y, z).foregroundColor;
@@ -481,8 +480,8 @@ public class Map {
         if(inFov(x, y, z)){
 
             if(Map.showDijkstra){
-                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().test != null){
-                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.test[x][y]);
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null){
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
                 }
             }
 

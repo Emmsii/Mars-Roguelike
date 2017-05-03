@@ -17,5 +17,11 @@ public class FindWeapon extends Behaviour{
     @Override
     public void update(Creature creature) {
         Log.trace("Creature is finding weapon");
+
+        /**
+         * look in inventory for best weapon.
+         *      if weapon found, equip, change behaviour
+         *      else look around?? (a*)
+         */
     }
 }

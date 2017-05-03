@@ -44,7 +44,7 @@ public abstract class CreatureAI {
         if(behaviour != null) behaviour.update(creature);
     }
 
-    public float calculateDangerValue(){
+    public float dangerValueOfArea(){
 		
 		/*
 		 * Danger Value is based off:
@@ -54,7 +54,7 @@ public abstract class CreatureAI {
 		 *  + Nearby enemies health
 		 */
 
-        float danger = 1f;
+        float danger = 0f;
         float healthValue = ((float) creature.hp() / (float) creature.maxHp()) * 0.65f;
         int alliesNear = creature.getCreaturesWhoSeeMe(creature.faction()).size() - 1;
 
@@ -73,18 +73,25 @@ public abstract class CreatureAI {
         
         float alliesNearValue = alliesNear * 0.25f;
 
-        float enemyHealthValue = totalMaxHealth == 0 ? 0f : ((float) totalHealth / (float) totalMaxHealth) * 0.75f;
-        float enemyNearValue = enemiesNearCount * 0.4f;
+        float enemiesHealthValue = totalMaxHealth == 0 ? 0f : ((float) totalHealth / (float) totalMaxHealth) * 0.75f;
+        float enemiesNearValue = enemiesNearCount * 0.4f;
 
         danger -= alliesNearValue;
         danger -= healthValue;
 
-        danger += enemyHealthValue;
-        danger += enemyNearValue;
+        danger += enemiesHealthValue;
+        danger += enemiesNearValue;
 
-        Log.trace("AlliesNearValue: " + alliesNearValue + " HealthValue: " + healthValue + " EnemyHealth: " + enemyHealthValue + " EnemiesNear: " + enemyNearValue);
-        Log.trace("DANGER: " + danger + " (1 - " + alliesNearValue + " - " + healthValue + " + " + enemyHealthValue + " + " + enemyNearValue + ")");
-
+//        Log.trace("AlliesNearValue: " + alliesNearValue + " HealthValue: " + healthValue + " EnemyHealth: " + enemyHealthValue + " EnemiesNear: " + enemyNearValue);
+//        Log.trace("DANGER: " + danger + " (1 - " + alliesNearValue + " - " + healthValue + " + " + enemyHealthValue + " + " + enemyNearValue + ")");
+        if(creature.id() == 1) {
+//            Log.trace("Self Health Value: " + healthValue);
+//            Log.trace("Allies Near Value: " + alliesNearValue);
+//            Log.trace("Enemies Near Value: " + enemiesNearValue);
+//            Log.trace("Enemies Health Value: " + enemiesHealthValue);
+//            Log.trace("Total Danger: " + danger);
+        }
+        
         return danger;
     }
 

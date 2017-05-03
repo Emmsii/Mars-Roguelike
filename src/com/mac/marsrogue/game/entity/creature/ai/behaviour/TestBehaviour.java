@@ -21,7 +21,7 @@ public class TestBehaviour extends  Behaviour {
         Log.trace("Testing Ai");
         Point next = creature.position();
         
-        next = Dijkstra.rollDown(creature.position(), creature.map().dijkstraMaps().test, 0, 6);
+        next = Dijkstra.rollDown(creature.position(), creature.map().dijkstraMaps().approach(), 0, 6);
          
         if(!next.equals(creature.position())){
             int mx = next.x - creature.x;

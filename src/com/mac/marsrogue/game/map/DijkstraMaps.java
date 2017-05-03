@@ -13,15 +13,13 @@ public class DijkstraMaps {
     private Dijkstra dijkstra;
     
     private int[][] approach;
-    public int[][] test;
     
     public DijkstraMaps(Map map){
         this.dijkstra = new Dijkstra(map);
     }
     
     public void updateApproach(Creature player){
-        //approach = dijkstra.generate(player.position(), 1);
-        test = dijkstra.generate(new Point(1, 1, 0), 1);
+        approach = dijkstra.generate(player.position(), 1);
     }
     
     public int[][] approach(){

@@ -38,7 +38,7 @@ public class Game {
         logs.put(LogType.MESSAGE, new MessageLog());
 
 //        map = new MapBuilder(136, 136, 30, 8).generate().build();
-        map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.075f, Tile.wallCenter).build();
+        map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.01f, Tile.wallCenter).build();
         map.setTile(1, 1, 0, Tile.floorTile);
         map.setTile(map.width() / 2, map.height() / 2, 0, Tile.floorTile);
         map.setTile(map.width() - 2, map.height() - 2, 0, Tile.floorTile);
@@ -84,7 +84,7 @@ public class Game {
             }
         }
 
-        for(int i = 0; i < 1; i++){
+        for(int i = 0; i < 4; i++){
             //			map.add(ItemBuilder.newGun(0, random), map.randomEmptyPoint(0));
             //			map.add(ItemBuilder.newRawMatter(0), map.randomEmptyPoint(0));
 
@@ -93,8 +93,7 @@ public class Game {
             //			for(int j = 0; j < random.nextInt(4); j++) mob.inventory().add(ItemBuilder.newGun(0, random));
             Gun g = ItemBuilder.newGun(0, random);
             g.equip(mob);
-//            map.add(mob, map.randomEmptyPoint(0));
-            map.add(mob, new Point(map.width() / 2, map.height() / 2, 0));
+            map.add(mob, map.randomEmptyPoint(0));
         }
 
         //		for(int i = 0; i < 30; i++){

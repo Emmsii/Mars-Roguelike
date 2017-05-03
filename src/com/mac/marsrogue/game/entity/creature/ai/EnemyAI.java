@@ -16,7 +16,6 @@ public class EnemyAI extends CreatureAI{
 
     @Override
     public void init() {
-//        setBehaviour(new AttackCreature(this, creature.map().player()));
-        setBehaviour(new TestBehaviour(this));
+        setBehaviour(new AttackCreature(this, creature.map().player()));
     }
 }
