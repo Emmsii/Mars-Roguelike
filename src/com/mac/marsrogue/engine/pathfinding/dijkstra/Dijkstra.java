@@ -37,7 +37,7 @@ public class Dijkstra {
             for(int x = 0; x < input.length; x++){
                 if(input[x][y] == FILL) continue;
                 if(input[x][y] > highest){
-                    highest = highest;
+                    highest = input[x][y];
                     point.x = x;
                     point.y = y;
                 }

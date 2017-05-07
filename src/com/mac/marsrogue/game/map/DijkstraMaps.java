@@ -27,9 +27,7 @@ public class DijkstraMaps {
     }
     
     public void updateFlee(Creature player){
-        flee = Dijkstra.calculate(Dijkstra.highestPoint(approach), 0, -1.2f, approach, map);
-//        Dijkstra.print(approach, "Approach");
-//        Dijkstra.print(flee, "Flee");
+        flee = Dijkstra.calculate(Dijkstra.highestPoint(approach), 0, 1, null, map);
 
     }
     

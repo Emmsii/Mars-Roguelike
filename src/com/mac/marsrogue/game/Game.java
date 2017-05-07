@@ -37,8 +37,8 @@ public class Game {
         logs.put(LogType.COMBAT, new MessageLog());
         logs.put(LogType.MESSAGE, new MessageLog());
 
-        map = new MapBuilder(136, 136, 30, 8).generate().build();
-//        map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.1f, Tile.wallCenter).build();
+//        map = new MapBuilder(136, 136, 30, 8).generate().build();
+        map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.25f, Tile.wallCenter).build();
 //        map.setTile(1, 1, 0, Tile.floorTile);
 //        map.setTile(map.width() / 2, map.height() / 2, 0, Tile.floorTile);
 //        map.setTile(map.width() - 2, map.height() - 2, 0, Tile.floorTile);

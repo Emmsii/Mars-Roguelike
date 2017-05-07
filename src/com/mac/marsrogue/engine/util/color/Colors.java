@@ -119,7 +119,7 @@ public class Colors {
         if(colors.length == 0 || colors.length != positions.length) throw new IllegalArgumentException();
         if(colors.length == 1) return colors[0];
         
-        if(v < 0) v *= -1;
+//        if(v < 0) v *= -1;
         
         if(v <= positions[0]) return colors[0];
         if(v >= positions[positions.length-1]) return colors[positions.length-1];

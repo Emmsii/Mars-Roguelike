@@ -469,8 +469,8 @@ public class Map {
             if(decal != null) return decal.brighter();
 
             if(Map.showDijkstra){
-                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().flee() != null)
-                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.flee()[x][y]);
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null)
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
             }
 
             return tile(x, y, z).foregroundColor;
@@ -486,8 +486,8 @@ public class Map {
         if(inFov(x, y, z)){
 
             if(Map.showDijkstra){
-                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().flee() != null){
-                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.flee()[x][y]);
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null){
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
                 }
             }
 
