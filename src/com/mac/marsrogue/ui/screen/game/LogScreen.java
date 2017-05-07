@@ -47,7 +47,7 @@ public class LogScreen extends Screen{
             int get = log.getEntries().size() - i - 1;
             if(get < 0) continue;
             ColoredString entry = log.getEntries().get(get);
-            Color color = i >= log.newEntries() ? entry.color.darker().darker() : entry.color;
+            Color color = i >= log.newEntries() && log.newEntries() != 0 ? entry.color.darker().darker() : entry.color;
             panel.write(entry.text, x + 1, y + height - 2 - i, color);
         }
         log.resetNewEntryCount();

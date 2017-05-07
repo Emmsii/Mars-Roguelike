@@ -115,9 +115,11 @@ public class Colors {
         return new Color(rN, bN, gN);
     }
 
-    public static Color getColorFromGradient(Color[] colors, float[] positions, float v ){
+    public static Color getColorFromGradient(Color[] colors, float[] positions, float v){
         if(colors.length == 0 || colors.length != positions.length) throw new IllegalArgumentException();
         if(colors.length == 1) return colors[0];
+        
+        if(v < 0) v *= -1;
         
         if(v <= positions[0]) return colors[0];
         if(v >= positions[positions.length-1]) return colors[positions.length-1];

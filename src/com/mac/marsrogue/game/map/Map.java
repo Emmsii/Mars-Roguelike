@@ -105,7 +105,10 @@ public class Map {
                 }
             }
         }
-
+        
+        dijkstraMaps.updateApproach(player);
+        dijkstraMaps.updateFlee(player);
+        
         for(int i = 0; i < positions.length; i++){
             positions[i] = p;
             p += ((float) 1 / (float) positions.length) * width;
@@ -113,7 +116,10 @@ public class Map {
     }
     
     public void update(int z){
-        if(player.hasMoved()) dijkstraMaps.updateApproach(player);
+        if(player.hasMoved()){
+            dijkstraMaps.updateApproach(player);
+            dijkstraMaps.updateFlee(player);
+        }
         
         List<Creature> creaturesToUpdate = new ArrayList<Creature>(creatures(z));
         for(Creature c : creaturesToUpdate) c.update();
@@ -463,8 +469,8 @@ public class Map {
             if(decal != null) return decal.brighter();
 
             if(Map.showDijkstra){
-                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null)
-                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().flee() != null)
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.flee()[x][y]);
             }
 
             return tile(x, y, z).foregroundColor;
@@ -480,8 +486,8 @@ public class Map {
         if(inFov(x, y, z)){
 
             if(Map.showDijkstra){
-                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().approach() != null){
-                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.approach()[x][y]);
+                if(!solid(x, y, z) && inBounds(x, y, z) && dijkstraMaps().flee() != null){
+                    return Colors.getColorFromGradient(colors, positions, dijkstraMaps.flee()[x][y]);
                 }
             }
 

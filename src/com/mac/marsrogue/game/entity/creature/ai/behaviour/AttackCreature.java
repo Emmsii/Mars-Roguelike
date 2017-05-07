@@ -57,6 +57,7 @@ public class AttackCreature extends Behaviour{
             float totalDanger = (targetDanger - selfDanger) + areaDanger + distanceDanger;
             
             if(creature.id() == 1) {
+                Log.trace("----------------");
                 Log.trace("Area Danger: " + areaDanger);
                 Log.trace("Target Danger: " + targetDanger);
                 Log.trace("Self Danger: " + selfDanger);
@@ -72,6 +73,10 @@ public class AttackCreature extends Behaviour{
 
             int range = gun.gunClass().recommendedRange();
             
+            float rangeModifier = (float) (Math.pow(targetDanger, 0.95f));
+            
+            if(creature.id() == 1) Log.trace("Range Modifier: " + rangeModifier + " Range: " + range);
+            range += rangeModifier;
             
             if(distanceToTarget <= range){
                 

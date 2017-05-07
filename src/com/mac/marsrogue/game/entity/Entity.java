@@ -3,6 +3,7 @@ package com.mac.marsrogue.game.entity;
 import com.mac.marsrogue.engine.util.Maths.*;
 import com.mac.marsrogue.engine.util.Maths.Point;
 import com.mac.marsrogue.engine.util.color.Colors;
+import com.mac.marsrogue.game.entity.creature.Creature;
 import com.mac.marsrogue.game.map.Map;
 
 import java.awt.*;
@@ -82,7 +83,7 @@ public abstract class Entity extends Drawable implements Cloneable{
     public Point position(){
         return new Point(x, y, z);
     }
-    
+
     public Entity newInstance(){
         try {
             return (Entity) this.clone();

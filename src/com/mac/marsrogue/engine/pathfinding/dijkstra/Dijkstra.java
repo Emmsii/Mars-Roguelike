@@ -1,7 +1,9 @@
 package com.mac.marsrogue.engine.pathfinding.dijkstra;
 
 import com.esotericsoftware.minlog.Log;
+import com.mac.marsrogue.engine.util.*;
 import com.mac.marsrogue.engine.util.Maths.Point;
+import com.mac.marsrogue.engine.util.Timer;
 import com.mac.marsrogue.game.map.Map;
 
 import java.util.*;
@@ -11,90 +13,137 @@ import java.util.*;
  * Created by Matt on 01/05/2017 at 03:44 PM.
  */
 public class Dijkstra {
+    
+    public static final int FILL = 10000;
 
-    public static final int FILL = Integer.MAX_VALUE;
-
-    private Map map;
-    private int width, height;
-    private int[][] result;
-
-    int maxValue;
-
-    public Dijkstra(Map map) {
-        this(map, 0);
+    public static void print(int[][] input, String title){
+        System.out.print(title);
+        for(int y = 0; y < input[0].length; y++){
+            System.out.print("\n");
+            for(int x = 0; x < input.length; x++){
+                int in = input[x][y];
+                if(in == FILL || in == -FILL) System.out.print("XX ");
+                else if(in < 10 && in > 0 || in > -10 && in < 0) System.out.print("0" + in + " ");
+                else System.out.print(in + " ");
+            }
+        }
     }
     
-    public Dijkstra(Map map, int maxValue) {
-        this.map = map;
-        this.width = map.width();
-        this.height = map.height();
-        this.maxValue = maxValue == 0 ? FILL : maxValue;
-        this.result = new int[width][height];
-
-        for(int y = 0; y < height; y++) for(int x = 0; x < width; x++) result[x][y] = FILL;
+    public static Point highestPoint(int[][] input){
+        Point point = new Point();
+        int highest = Integer.MIN_VALUE;
+        
+        for(int y = 0; y < input[0].length; y++){
+            for(int x = 0; x < input.length; x++){
+                if(input[x][y] == FILL) continue;
+                if(input[x][y] > highest){
+                    highest = highest;
+                    point.x = x;
+                    point.y = y;
+                }
+            }
+        }
+        
+        return point;
     }
-
-    public int[][] generate(HashMap<Point, Integer> goals, int weightChange, float multiplier){
-        for(int y = 0; y < height; y++) for(int x = 0; x < width; x++) result[x][y] = FILL;
-
+    
+    public static int[][] calculate(Point goal, int offset, float coefficient, int[][] input, Map map){
         List<Point> open = new ArrayList<Point>();
         Set<Point> closed = new HashSet<Point>();
 
-        for(Point p : goals.keySet()){
-            if(map.solid(p.x, p.y, p.z)){
-                Log.warn("Goal must be an empty tile: " + p + " Tile: " + map.tile(p.x, p.y, p.z));
-                continue;
+        int[][] result = new int[map.width()][map.height()];
+        
+        //Initialize a new result array if input array is null
+        if(input == null){
+            for(int y = 0; y < map.height(); y++) {
+                for (int x = 0; x < map.width(); x++) {
+                    result[x][y] = FILL;
+                }
             }
-            result[p.x][p.y] = (int) ((goals.get(p) - weightChange) * multiplier);
-            open.add(p);
-        }
-
+        }else System.arraycopy(input, 0, result, 0, input.length);
+        
+        
+        //Set goal tile
+        open.add(goal);
+        result[goal.x][goal.y] = 0 - offset;
+                         
         while(!open.isEmpty()){
+            //Get a point from the open list to evaluate
             Point current = open.remove(0);
-
-            int lowestNeighbour = FILL;
-
+            
+            int lowestNeighbourTile = FILL;
+            
+            //Get a list of neighbours from the current point (Cardinal + Diagonal)
             List<Point> neighbours = current.neighboursAll();
-
+  
             for(Point p : neighbours){
+                //If neighbour tile is solid, ignore
                 if(map.solid(p.x, p.y, p.z)) continue;
+                //If out of bounds, ignore
                 if(!map.inBounds(p.x, p.y, p.z)) continue;
-                if(result[p.x][p.y] >= maxValue && result[p.x][p.y] != FILL) continue;
-                if(result[p.x][p.y] < lowestNeighbour) lowestNeighbour = result[p.x][p.y];
+                //If neighbour tile value is < lowestNeighbourTile
+                if(result[p.x][p.y] < lowestNeighbourTile) lowestNeighbourTile = result[p.x][p.y];
+                //If neighbour is NOT in open list and NOT in closed, add to open list
                 if(!open.contains(p) && !closed.contains(p)) open.add(p);
             }
-
-            if(lowestNeighbour < result[current.x][current.y]) result[current.x][current.y] = (int) ((lowestNeighbour + 1) * multiplier);
+            
+            //If lowest neighbour is < current tile, set current tile to +1 of lowest neighbour
+            if(lowestNeighbourTile != FILL && lowestNeighbourTile < result[current.x][current.y]){
+                result[current.x][current.y] = lowestNeighbourTile + 1;
+            }
             closed.add(current);
         }
 
         return result;
     }
 
-    public int[][] generate(HashMap<Point, Integer> goals, float multiplier){
-        return generate(goals, 0, multiplier);
-    }
+    public static int[][] calculate(Point goal, float coefficient, int[][] array, Map map){
+        List<Point> open = new ArrayList<Point>();
+        Set<Point> closed = new HashSet<Point>();
 
-    public int[][] generate(Point goal, int cost, float multiplier){
-        HashMap<Point, Integer> goals = new HashMap<Point, Integer>();
-        goals.put(goal, cost);
-        return generate(goals, multiplier);
-    }
+        //Set goal tile
+        array[goal.x][goal.y] = 0;
+        open.add(goal);
 
-    public int[][] generate(Point goal, float multiplier){
-        return generate(goal, 0, multiplier);
-    }
+        if(coefficient != 1) for(int y = 0; y < map.height(); y++) for(int x = 0; x < map.width(); x++) if(array[x][y] != FILL) array[x][y] *= coefficient;
+        
+        while(!open.isEmpty()){
+            //Get a point from the open list to evaluate
+            Point current = open.remove(0);
 
-    public static Point rollDown(Point start, int[][] input, int offset, int stopAt){
-        Log.trace("Rolling down");
-        if(start.x < 0 || start.y < 0 || start.x >= input.length || start.y >= input[0].length){
-            Log.warn("Cannot roll down dijkstra map, input point out of bounds: " + start);
-            return start;
+            //Value FILL = 10000
+            int lowestNeighbourTile = FILL;
+
+            //Get a list of neighbours from the current point (Cardinal + Diagonal)
+            List<Point> neighbours = current.neighboursCardinal();
+
+            //
+            for(Point p : neighbours){
+                //If neighbour tile is solid, ignore
+                if(map.solid(p.x, p.y, p.z)) continue;
+                //If out of bounds, ignore
+                if(!map.inBounds(p.x, p.y, p.z)) continue;
+                //If neighbour tile value is < lowestNeighbourTile
+                if(array[p.x][p.y] < lowestNeighbourTile) lowestNeighbourTile = array[p.x][p.y];
+                //If neighbour is NOT in open list and NOT in closed, add to open list
+                if(!open.contains(p) && !closed.contains(p)) open.add(p);
+            }
+
+            //If lowest neighbour is < current tile, set current tile to +1 of lowest neighbour
+            if(lowestNeighbourTile != FILL && lowestNeighbourTile < array[current.x][current.y]){
+                array[current.x][current.y] = lowestNeighbourTile + 1;
+            }
+            closed.add(current);
         }
-
+        return array;
+    }
+    
+    public static Point rollDown(Point start, int[][] input, int offset, int stopAt){
+                
+        //if the current input tile plus the offset value = the stopAt value, return 
         if(input[start.x][start.y] + offset == stopAt) return start;
         else if(input[start.x][start.y] + offset < stopAt) return rollUp(start, input, offset, stopAt);
-
+        
         Point pointCardinal = start;
         int lowestCardinal = Integer.MAX_VALUE;
         for(Point n : start.neighboursCardinal()){
@@ -120,16 +169,11 @@ public class Dijkstra {
         if(lowestCardinal <= lowestDiagonal) return pointCardinal;
         else return pointDiagonal;
     }
-
+    
     public static Point rollUp(Point start, int[][] input, int offset, int stopAt){
-        if(start.x < 0 || start.y < 0 || start.x >= input.length || start.y >= input[0].length){
-            Log.warn("Cannot roll down dijkstra map, input point out of bounds: " + start);
-            return start;
-        }
-
         if(input[start.x][start.y] + offset == stopAt) return start;
         else if(input[start.x][start.y] + offset > stopAt) return rollDown(start, input, offset, stopAt);
-        
+
         Point pointCardinal = start;
         int highestCardinal = Integer.MIN_VALUE;
         for(Point n : start.neighboursCardinal()){
@@ -155,4 +199,5 @@ public class Dijkstra {
         if(highestCardinal >= highestDiagonal) return pointCardinal;
         else return pointDiagonal;
     }
+
 }

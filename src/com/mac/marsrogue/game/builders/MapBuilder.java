@@ -66,7 +66,6 @@ public class MapBuilder {
     /** Build Methods **/
 
     public Map build(){
-        map.init();
         return map;
     }
 

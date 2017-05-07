@@ -10,19 +10,34 @@ import com.mac.marsrogue.game.entity.creature.Creature;
  */
 public class DijkstraMaps {
     
-    private Dijkstra dijkstra;
+//    private Dijkstra dijkstra;
     
     private int[][] approach;
+    private int[][] flee;
+    
+    private Map map;
     
     public DijkstraMaps(Map map){
-        this.dijkstra = new Dijkstra(map);
+        this.map = map;
     }
     
     public void updateApproach(Creature player){
-        approach = dijkstra.generate(player.position(), 1);
+        approach = Dijkstra.calculate(player.position(), 0, 1, null, map);
+
+    }
+    
+    public void updateFlee(Creature player){
+        flee = Dijkstra.calculate(Dijkstra.highestPoint(approach), 0, -1.2f, approach, map);
+//        Dijkstra.print(approach, "Approach");
+//        Dijkstra.print(flee, "Flee");
+
     }
     
     public int[][] approach(){
         return approach;
+    }
+    
+    public int[][] flee(){
+        return flee;
     }
 }

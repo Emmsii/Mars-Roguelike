@@ -37,11 +37,11 @@ public class Game {
         logs.put(LogType.COMBAT, new MessageLog());
         logs.put(LogType.MESSAGE, new MessageLog());
 
-//        map = new MapBuilder(136, 136, 30, 8).generate().build();
-        map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.01f, Tile.wallCenter).build();
-        map.setTile(1, 1, 0, Tile.floorTile);
-        map.setTile(map.width() / 2, map.height() / 2, 0, Tile.floorTile);
-        map.setTile(map.width() - 2, map.height() - 2, 0, Tile.floorTile);
+        map = new MapBuilder(136, 136, 30, 8).generate().build();
+//        map = new MapBuilder(32, 32, 1, 8, 1234).generateEmptyWalledMap().randomScatterTile(0.1f, Tile.wallCenter).build();
+//        map.setTile(1, 1, 0, Tile.floorTile);
+//        map.setTile(map.width() / 2, map.height() / 2, 0, Tile.floorTile);
+//        map.setTile(map.width() - 2, map.height() - 2, 0, Tile.floorTile);
         
         ItemBuilder.createGunBlueprints(map.depth(), 3, 12, 0.8f, random);
 
@@ -105,6 +105,8 @@ public class Game {
         //			
         //			System.out.println("Level: " + i + " Average Score: " + (score / 100));
         //		}
+        
+        map.init();
     }
 
     public void update(){
